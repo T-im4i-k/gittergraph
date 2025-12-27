@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gittergraph"
+version = "0.1.0"
+description = "Modern git graph your terminal"
+readme = "README.md"
+requires-python = ">=3.12"
+
+dependencies = [
+    "textual",
+    "pygit2",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "pylint",
+    "black",
+    "mypy",
+]
+
+[project.scripts]
+gittergraph = "gittergraph.__main__:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pylint.messages_control]
+disable = ["C0301", "C0103"]
