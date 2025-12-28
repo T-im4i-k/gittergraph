@@ -6,7 +6,7 @@ help:
 	@echo "Available targets:"
 	@echo "  make install      - Install package (non-editable)"
 	@echo "  make install-dev  - Install package in editable mode with dev dependencies"
-	@echo "  make format       - Format code with black"
+	@echo "  make format       - Format code with isort and black"
 	@echo "  make lint         - Run pylint on source and tests"
 	@echo "  make mypy         - Run mypy type checking"
 	@echo "  make test         - Run pytest"
@@ -19,7 +19,10 @@ install:
 install-dev:
 	pip install -e .[dev]
 
+
 format:
+	@echo "Sorting imports with isort..."
+	isort src/ tests/
 	@echo "Formatting code with black..."
 	black src/ tests/
 
