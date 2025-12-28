@@ -7,6 +7,7 @@ Provides classes for representing signatures, commits, tags, and branches.
 
 from dataclasses import dataclass
 from datetime import datetime
+
 from gittergraph.utils.time import unix_timestamp_to_datetime
 
 

@@ -4,15 +4,17 @@ Tests for data models for git objects.
 
 Covers all classes and properties in model.py.
 """
-from datetime import datetime, timezone, timedelta
+from datetime import datetime, timedelta, timezone
+
 import pytest
+
 from gittergraph.data.model import (
-    Signature,
-    Commit,
-    Tag,
-    LightweightTag,
     AnnotatedTag,
     Branch,
+    Commit,
+    LightweightTag,
+    Signature,
+    Tag,
 )
 
 

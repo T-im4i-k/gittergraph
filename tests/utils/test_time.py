@@ -4,8 +4,10 @@ Tests for time utility functions.
 
 Covers helpers for working with time.
 """
+from datetime import datetime, timedelta, timezone
+
 import pytest
-from datetime import datetime, timezone, timedelta
+
 from gittergraph.utils.time import unix_timestamp_to_datetime
 
 
