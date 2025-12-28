@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "gittergraph"
 version = "0.1.0"
-description = "Modern git graph your terminal"
+description = "Modern git graph in your terminal"
 readme = "README.md"
 requires-python = ">=3.12"
 
@@ -20,6 +20,7 @@ dev = [
     "pylint",
     "black",
     "mypy",
+    "isort",
 ]
 
 [project.scripts]
@@ -30,3 +31,6 @@ where = ["src"]
 
 [tool.pylint.messages_control]
 disable = ["C0301", "C0103"]
+
+[tool.isort]
+profile = "black"
