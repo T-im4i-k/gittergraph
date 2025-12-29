@@ -14,24 +14,6 @@ import pytest
 from gittergraph.data.base_access import BaseAccess
 
 
-@pytest.fixture
-def simple_repo(tmp_path):
-    """
-    Create a minimal git repository for testing.
-
-    Initializes a new repository, creates an initial commit, and returns the path.
-    """
-    repo_path = tmp_path / "test_repo"
-    repo = pygit2.init_repository(str(repo_path))
-
-    # Create initial commit
-    tree = repo.TreeBuilder().write()
-    author = pygit2.Signature("Test User", "test@example.com")
-    repo.create_commit("refs/heads/main", author, author, "Initial commit", tree, [])
-
-    return repo_path
-
-
 @pytest.mark.parametrize("path_type", ["str", "Path"])
 def test_init_with_valid_repo(simple_repo, path_type):
     """
@@ -39,12 +21,14 @@ def test_init_with_valid_repo(simple_repo, path_type):
 
     Checks both string and Path types for repository path argument.
     """
+    repo_path, _ = simple_repo
+
     # Convert to requested type
-    path = str(simple_repo) if path_type == "str" else simple_repo
+    path = str(repo_path) if path_type == "str" else repo_path
 
     access = BaseAccess(path)
 
-    assert access.path == Path(simple_repo)
+    assert access.path == Path(repo_path)
     assert isinstance(access._repo, pygit2.Repository)
     assert not access._repo.is_empty
 
