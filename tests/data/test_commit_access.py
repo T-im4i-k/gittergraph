@@ -10,7 +10,7 @@ import pygit2
 import pytest
 
 from gittergraph.data.commit_access import CommitAccess
-from gittergraph.data.model import Commit
+from gittergraph.models import Commit
 
 
 class TestToModel:

@@ -8,14 +8,14 @@ from datetime import datetime, timedelta, timezone
 
 import pytest
 
-from gittergraph.data.model import (
+from gittergraph.models import (  # Tag,
     AnnotatedTag,
     Branch,
     Commit,
     LightweightTag,
     Signature,
-    Tag,
 )
+from gittergraph.models.tag import Tag
 
 
 def make_signature(**kwargs):
