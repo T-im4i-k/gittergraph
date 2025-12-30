@@ -113,7 +113,11 @@ def repo_with_branches(empty_repo):
 
 @pytest.fixture
 def repo_detached_head(empty_repo):
-    """Create a repository with detached HEAD."""
+    """
+    Create a repository with detached HEAD.
+
+    Initializes a new repository, creates a commit on main, and detaches HEAD to point directly to the commit. Returns the repository path and commit id.
+    """
     repo_path, repo = empty_repo
 
     tree = repo.TreeBuilder().write()
