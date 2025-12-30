@@ -130,3 +130,48 @@ def repo_detached_head(empty_repo):
     repo.set_head(id_)
 
     return repo_path, [str(id_)]
+
+
+@pytest.fixture
+def repo_with_remote_tracking(tmp_path):
+    """
+    Fixture for a repository with a local branch and its remote-tracking branch.
+
+    Creates a commit on main and adds a remote-tracking branch (origin/main) pointing to the same commit. Returns the repository path and commit id.
+    """
+    repo_path = tmp_path / "test_repo"
+    repo = pygit2.init_repository(str(repo_path))
+
+    tree = repo.TreeBuilder().write()
+    author = pygit2.Signature("Test", "test@example.com")
+    oid = repo.create_commit("refs/heads/main", author, author, "Commit", tree, [])
+    repo.create_reference("refs/remotes/origin/main", oid)
+
+    return repo_path, [str(oid)]
+
+
+@pytest.fixture
+def repo_with_remote_branches(tmp_path):
+    """
+    Fixture for a repository with both local and remote branches.
+
+    Creates commits on local branches (main, develop) and sets up corresponding remote branches (origin/main, origin/develop, upstream/main). Returns the repository path and commit ids.
+    """
+    repo_path = tmp_path / "test_repo"
+    repo = pygit2.init_repository(str(repo_path))
+
+    tree = repo.TreeBuilder().write()
+    author = pygit2.Signature("Test", "test@example.com")
+
+    # Create local branches
+    c1 = repo.create_commit("refs/heads/main", author, author, "Commit 1", tree, [])
+    c2 = repo.create_commit(
+        "refs/heads/develop", author, author, "Commit 2", tree, [c1]
+    )
+
+    # Create remote branches
+    repo.create_reference("refs/remotes/origin/main", c1)
+    repo.create_reference("refs/remotes/origin/develop", c2)
+    repo.create_reference("refs/remotes/upstream/main", c1)
+
+    return repo_path, [str(c1), str(c2)]
