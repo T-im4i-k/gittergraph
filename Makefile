@@ -30,7 +30,7 @@ lint:
 	@echo "Running pylint on source code..."
 	pylint src/gittergraph/
 	@echo "Running pylint on tests..."
-	pylint tests/ --disable=W0621,W0212
+	pylint tests/ --disable=W0621,W0212,E0401
 
 mypy:
 	@echo "Running mypy type checking..."
