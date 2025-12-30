@@ -12,14 +12,25 @@ import pytest
 
 
 @pytest.fixture
-def simple_repo(tmp_path):
+def empty_repo(tmp_path):
+    """
+    Create an empty git repository.
+
+    Initializes a new repository in a temporary directory and returns the repository path and pygit2.Repository object.
+    """
+    repo_path = tmp_path / "test_repo"
+    repo = pygit2.init_repository(str(repo_path))
+    return repo_path, repo
+
+
+@pytest.fixture
+def simple_repo(empty_repo):
     """
     Create a simple git repository with one commit.
 
     Initializes a new repository, creates an initial commit, and returns the path and commit id.
     """
-    repo_path = tmp_path / "test_repo"
-    repo = pygit2.init_repository(str(repo_path))
+    repo_path, repo = empty_repo
 
     tree = repo.TreeBuilder().write()
     author = pygit2.Signature("Alice", "alice@example.com", 1234567890, 60)
@@ -31,14 +42,13 @@ def simple_repo(tmp_path):
 
 
 @pytest.fixture
-def repo_different_author_and_commiter(tmp_path):
+def repo_different_author_and_commiter(empty_repo):
     """
     Create a git repository with a commit having different author and committer.
 
     Initializes a new repository, creates an initial commit with distinct author and committer, and returns the path and commit id.
     """
-    repo_path = tmp_path / "test_repo"
-    repo = pygit2.init_repository(str(repo_path))
+    repo_path, repo = empty_repo
 
     tree = repo.TreeBuilder().write()
     author = pygit2.Signature("Alice", "alice@example.com", 1234567890, 60)
@@ -51,14 +61,13 @@ def repo_different_author_and_commiter(tmp_path):
 
 
 @pytest.fixture
-def repo_with_history(tmp_path):
+def repo_with_history(empty_repo):
     """
     Create a git repository with multiple commits.
 
     Initializes a repository and creates a linear history of five commits. Returns the path and commit ids.
     """
-    repo_path = tmp_path / "test_repo"
-    repo = pygit2.init_repository(str(repo_path))
+    repo_path, repo = empty_repo
 
     commit_ids = []
     for i in range(5):
@@ -77,14 +86,13 @@ def repo_with_history(tmp_path):
 
 
 @pytest.fixture
-def repo_with_branches(tmp_path):
+def repo_with_branches(empty_repo):
     """
     Create a git repository with multiple branches.
 
     Initializes a repository, creates commits on main and feature branches, and returns the path and commit ids.
     """
-    repo_path = tmp_path / "test_repo"
-    repo = pygit2.init_repository(str(repo_path))
+    repo_path, repo = empty_repo
 
     # Create main branch commits
     tree = repo.TreeBuilder().write()
@@ -101,3 +109,20 @@ def repo_with_branches(tmp_path):
     )
 
     return repo_path, [str(c1), str(c2), str(c3)]
+
+
+@pytest.fixture
+def repo_detached_head(empty_repo):
+    """Create a repository with detached HEAD."""
+    repo_path, repo = empty_repo
+
+    tree = repo.TreeBuilder().write()
+    author = pygit2.Signature("Test", "test@example.com")
+    id_ = repo.create_commit(
+        "refs/heads/main", author, author, "First commit", tree, []
+    )
+
+    # Detach HEAD
+    repo.set_head(id_)
+
+    return repo_path, [str(id_)]

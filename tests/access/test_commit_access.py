@@ -236,14 +236,13 @@ class TestGetAll:
         for id_ in commit_ids:
             assert id_ in commits
 
-    def test_get_all_empty_repo(self, tmp_path):
+    def test_get_all_empty_repo(self, empty_repo):
         """
         Test get_all with empty repository.
 
         Ensures an empty dict is returned for an empty repo.
         """
-        repo_path = tmp_path / "test_repo"
-        pygit2.init_repository(str(repo_path))
+        repo_path, _ = empty_repo
 
         access = CommitAccess(repo_path)
         commits = access.get_all()
