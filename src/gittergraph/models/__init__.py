@@ -9,4 +9,4 @@ from .branch import Branch
 from .commit import Commit
 from .head import HeadInfo, HeadState
 from .signature import Signature
-from .tag import AnnotatedTag, LightweightTag
+from .tag import Tag
