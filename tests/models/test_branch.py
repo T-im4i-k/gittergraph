@@ -25,6 +25,6 @@ def test_branch_is_remote_and_shorthand(name, is_remote, expected_shorthand):
 
     Checks detection of remote branches and shorthand extraction.
     """
-    b = Branch(target_id="id", name=name, is_head=False)
+    b = Branch(target_id="id", name=name)
     assert b.is_remote is is_remote
     assert b.shorthand == expected_shorthand

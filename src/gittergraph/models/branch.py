@@ -19,7 +19,6 @@ class Branch:
 
     target_id: str
     name: str
-    is_head: bool
 
     @property
     def is_remote(self) -> bool:
