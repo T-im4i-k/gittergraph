@@ -11,7 +11,7 @@ from pathlib import Path
 import pygit2
 import pytest
 
-from gittergraph.data.base_access import BaseAccess
+from gittergraph.access.base_access import BaseAccess
 
 
 @pytest.mark.parametrize("path_type", ["str", "Path"])

@@ -9,7 +9,7 @@ Provides pytest-based tests for commit access, conversion, and error handling.
 import pygit2
 import pytest
 
-from gittergraph.data.commit_access import CommitAccess
+from gittergraph.access.commit_access import CommitAccess
 from gittergraph.models import Commit
 
 

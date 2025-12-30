@@ -7,7 +7,7 @@ Provides access layer for retrieving and converting git commit objects.
 
 import pygit2
 
-from gittergraph.data.base_access import BaseAccess
+from gittergraph.access.base_access import BaseAccess
 from gittergraph.models import Commit, Signature
 
 
