@@ -7,6 +7,6 @@ Provides dataclasses for representing core Git objects and metadata, including b
 
 from .branch import Branch
 from .commit import Commit
+from .head import HeadInfo, HeadState
 from .signature import Signature
 from .tag import AnnotatedTag, LightweightTag
-from .head import HeadInfo, HeadState
