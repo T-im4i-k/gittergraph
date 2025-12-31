@@ -175,3 +175,53 @@ def repo_with_remote_branches(tmp_path):
     repo.create_reference("refs/remotes/upstream/main", c1)
 
     return repo_path, [str(c1), str(c2)]
+
+
+@pytest.fixture
+def repo_with_lightweight_tag(empty_repo):
+    """Create a repository with a lightweight tag."""
+    repo_path, repo = empty_repo
+
+    tree = repo.TreeBuilder().write()
+    author = pygit2.Signature("Test", "test@example.com")
+    oid = repo.create_commit("refs/heads/main", author, author, "Commit", tree, [])
+
+    # Create lightweight tag
+    repo.create_reference("refs/tags/v1.0.0", oid)
+
+    return repo_path, [str(oid)]
+
+
+@pytest.fixture
+def repo_with_annotated_tag(empty_repo):
+    """Create a repository with an annotated tag."""
+    repo_path, repo = empty_repo
+
+    tree = repo.TreeBuilder().write()
+    author = pygit2.Signature("Test", "test@example.com")
+    oid = repo.create_commit("refs/heads/main", author, author, "Commit", tree, [])
+
+    # Create annotated tag
+    repo.create_tag("v2.0.0", oid, pygit2.GIT_OBJECT_COMMIT, author, "Release 2.0.0")
+
+    return repo_path, [str(oid)]
+
+
+@pytest.fixture
+def repo_with_multiple_tags(empty_repo):
+    """Create a repository with multiple tags on different commits."""
+    repo_path, repo = empty_repo
+
+    tree = repo.TreeBuilder().write()
+    author = pygit2.Signature("Test", "test@example.com")
+
+    # Create commits
+    c1 = repo.create_commit("refs/heads/main", author, author, "Commit 1", tree, [])
+    c2 = repo.create_commit("refs/heads/main", author, author, "Commit 2", tree, [c1])
+
+    # Create tags
+    repo.create_reference("refs/tags/v1.0.0", c1)
+    repo.create_tag("v2.0.0", c2, pygit2.GIT_OBJECT_COMMIT, author, "Release 2.0")
+    repo.create_reference("refs/tags/latest", c2)
+
+    return repo_path, [str(c1), str(c2)]
