@@ -8,6 +8,7 @@ Provides utility functions for constructing test objects, such as RefResolver, t
 
 
 from gittergraph.access import GitRepository
+from gittergraph.core.ref_index import RefIndex
 from gittergraph.core.ref_resolver import RefResolver
 
 
@@ -28,3 +29,15 @@ def get_ref_resolver(
 
     resolver = RefResolver(commits, branches, tags, head_info)
     return resolver
+
+
+def get_ref_index(repo_path: str) -> RefIndex:
+    """
+    Create a RefIndex for a given repository path.
+
+    Loads branches and tags from the repository and constructs a RefIndex for fast lookups.
+    """
+    git_repo = GitRepository(repo_path)
+    branches = git_repo.branches.get_all()
+    tags = git_repo.tags.get_all()
+    return RefIndex(branches, tags)
