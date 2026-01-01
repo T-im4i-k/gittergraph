@@ -22,7 +22,7 @@ class RefResolver:  # pylint: disable=too-few-public-methods
         branches: dict[str, Branch],
         tags: dict[str, Tag],
         head_info: HeadInfo,
-    ):
+    ) -> None:
         """
         Initialize reference resolver.
 

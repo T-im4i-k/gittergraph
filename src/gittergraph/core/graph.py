@@ -23,7 +23,7 @@ class GitGraph:
     Loads and organizes repository data for efficient access and rendering. Uses helper classes for reference resolution, indexing, and history traversal.
     """
 
-    def __init__(self, repo: GitRepository):
+    def __init__(self, repo: GitRepository) -> None:
         """
         Initialize graph from repository.
 
@@ -86,7 +86,7 @@ class GitGraph:
 
         return self._history_walker.get_linear_history_from_commit(start_id)
 
-    def reload(self):
+    def reload(self) -> None:
         """
         Reload graph data from repository.
 
@@ -101,7 +101,7 @@ class GitGraph:
             # Rebuild helpers with fresh data
             self._build_helpers()
 
-    def _build_helpers(self):
+    def _build_helpers(self) -> None:
         """
         Build helper indexes with current data.
 

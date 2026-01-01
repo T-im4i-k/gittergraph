@@ -16,7 +16,7 @@ class HistoryWalker:  # pylint: disable=too-few-public-methods
     Provides methods for walking first-parent chains and other traversals.
     """
 
-    def __init__(self, commits: dict[str, Commit]):
+    def __init__(self, commits: dict[str, Commit]) -> None:
         """
         Initialize history walker.
 
