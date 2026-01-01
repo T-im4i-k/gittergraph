@@ -44,14 +44,14 @@ class TestToModel:
 
         Verifies correct conversion and property values for a remote branch.
         """
-        repo_path, commit_oids = repo_with_remote_tracking
+        repo_path, commit_ids = repo_with_remote_tracking
         repo = pygit2.Repository(str(repo_path))
 
         pygit_branch = repo.branches["origin/main"]
         branch = BranchAccess.to_model(pygit_branch)
 
         assert branch.name == "refs/remotes/origin/main"
-        assert branch.target_id == commit_oids[0]
+        assert branch.target_id == commit_ids[0]
         assert branch.is_remote
         assert branch.shorthand == "origin/main"
 
@@ -69,13 +69,13 @@ class TestGet:
 
         Ensures correct retrieval and property values for a local branch.
         """
-        repo_path, commit_oids = simple_repo
+        repo_path, commit_ids = simple_repo
         access = BranchAccess(repo_path)
 
-        branch = access.get("main")
+        branch = access.get("refs/heads/main")
 
         assert branch.name == "refs/heads/main"
-        assert branch.target_id == commit_oids[0]
+        assert branch.target_id == commit_ids[0]
         assert not branch.is_remote
 
     def test_get_existing_remote_branch(self, repo_with_remote_tracking):
@@ -84,13 +84,13 @@ class TestGet:
 
         Ensures correct retrieval and property values for a remote branch.
         """
-        repo_path, commit_oids = repo_with_remote_tracking
+        repo_path, commit_ids = repo_with_remote_tracking
 
         access = BranchAccess(repo_path)
-        branch = access.get("origin/main")
+        branch = access.get("refs/remotes/origin/main")
 
         assert branch.name == "refs/remotes/origin/main"
-        assert branch.target_id == commit_oids[0]
+        assert branch.target_id == commit_ids[0]
         assert branch.is_remote
 
     def test_get_nonexistent_branch_raises_keyerror(self, simple_repo):
@@ -102,16 +102,16 @@ class TestGet:
         repo_path, _ = simple_repo
         access = BranchAccess(repo_path)
 
-        with pytest.raises(KeyError, match="Branch not found"):
+        with pytest.raises(KeyError, match="Branch 'nonexistent' not found"):
             access.get("nonexistent")
 
     @pytest.mark.parametrize(
         "branch_name",
         [
-            "develop",
-            "feature/new-feature",
-            "bugfix/fix-123",
-            "release/v1.0.0",
+            "refs/heads/develop",
+            "refs/heads/feature/new-feature",
+            "refs/heads/bugfix/fix-123",
+            "refs/heads/release/v1.0.0",
         ],
     )
     def test_get_various_branch_names(self, tmp_path, branch_name):
@@ -125,15 +125,13 @@ class TestGet:
 
         tree = repo.TreeBuilder().write()
         author = pygit2.Signature("Test", "test@example.com")
-        oid = repo.create_commit(
-            f"refs/heads/{branch_name}", author, author, "Commit", tree, []
-        )
+        oid = repo.create_commit(branch_name, author, author, "Commit", tree, [])
 
         access = BranchAccess(repo_path)
         branch = access.get(branch_name)
 
-        assert branch.name == f"refs/heads/{branch_name}"
-        assert branch.shorthand == branch_name
+        assert branch.name == branch_name
+        assert branch.shorthand == branch_name.removeprefix("refs/heads/")
         assert branch.target_id == str(oid)
 
 
@@ -150,14 +148,14 @@ class TestGetAll:
 
         Ensures correct retrieval and dictionary structure for a single branch.
         """
-        repo_path, commit_oids = simple_repo
+        repo_path, commit_ids = simple_repo
         access = BranchAccess(repo_path)
 
         branches = access.get_all()
 
         assert len(branches) == 1
         assert "refs/heads/main" in branches
-        assert branches["refs/heads/main"].target_id == commit_oids[0]
+        assert branches["refs/heads/main"].target_id == commit_ids[0]
 
     def test_get_all_multiple_local_branches(self, repo_with_branches):
         """
@@ -165,7 +163,7 @@ class TestGetAll:
 
         Ensures correct retrieval and dictionary structure for multiple local branches.
         """
-        repo_path, commit_oids = repo_with_branches
+        repo_path, commit_ids = repo_with_branches
         access = BranchAccess(repo_path)
 
         branches = access.get_all()
@@ -173,8 +171,8 @@ class TestGetAll:
         assert len(branches) == 2
         assert "refs/heads/main" in branches
         assert "refs/heads/feature" in branches
-        assert branches["refs/heads/main"].target_id == commit_oids[1]
-        assert branches["refs/heads/feature"].target_id == commit_oids[2]
+        assert branches["refs/heads/main"].target_id == commit_ids[1]
+        assert branches["refs/heads/feature"].target_id == commit_ids[2]
 
     def test_get_all_with_remote_branches(self, repo_with_remote_branches):
         """
@@ -272,7 +270,7 @@ class TestBranchProperties:
         repo_path, _ = simple_repo
         access = BranchAccess(repo_path)
 
-        branch = access.get("main")
+        branch = access.get("refs/heads/main")
 
         assert not branch.is_remote
         assert branch.shorthand == "main"
@@ -287,7 +285,7 @@ class TestBranchProperties:
         repo_path, _ = repo_with_remote_tracking
 
         access = BranchAccess(repo_path)
-        branch = access.get("origin/main")
+        branch = access.get("refs/remotes/origin/main")
 
         assert branch.is_remote
         assert branch.shorthand == "origin/main"
@@ -309,7 +307,7 @@ class TestBranchProperties:
         )
 
         access = BranchAccess(repo_path)
-        branch = access.get("feature/add-login")
+        branch = access.get("refs/heads/feature/add-login")
 
         assert branch.shorthand == "feature/add-login"
         assert branch.name == "refs/heads/feature/add-login"

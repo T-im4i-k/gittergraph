@@ -39,16 +39,29 @@ class BranchAccess(BaseAccess):
         """
         branches: dict[str, Branch] = {}
 
-        for shorthand in self._repo.branches:
-            branch: Branch = self.get(shorthand)
-            branches[branch.name] = branch
+        for shorthand in self._repo.branches.local:
+            name_local: str = f"refs/heads/{shorthand}"
+            branches[name_local] = self.get(name_local)
+
+        for shorthand in self._repo.branches.remote:
+            name_remote: str = f"refs/remotes/{shorthand}"
+            branches[name_remote] = self.get(name_remote)
 
         return branches
 
-    def get(self, shorthand: str) -> Branch:
+    def get(self, name: str) -> Branch:
         """
-        Get a specific branch by name.
+        Get a specific branch by full reference name.
 
-        Returns a Branch model for the given branch shorthand name.
+        Returns a Branch model for the given full branch name.
         """
+
+        shorthand: str = name
+        if name.startswith("refs/heads/"):
+            shorthand = shorthand.removeprefix("refs/heads/")
+        elif name.startswith("refs/remotes/"):
+            shorthand = shorthand.removeprefix("refs/remotes/")
+        else:
+            raise KeyError(f"Branch '{name}' not found")
+
         return BranchAccess.to_model(self._repo.branches[shorthand])
