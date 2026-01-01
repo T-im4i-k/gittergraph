@@ -5,15 +5,16 @@ Tests for HistoryWalker class.
 Tests commit history traversal functionality, including linear history walking and first-parent chain following.
 """
 
-import pygit2
 import pytest
-
-from gittergraph.access import GitRepository
-from gittergraph.core.history_walker import HistoryWalker
+from core_helper import get_history_walker
 
 
 class TestHistoryWalker:
-    """Tests for HistoryWalker class."""
+    """
+    Tests for HistoryWalker class.
+
+    Covers commit history traversal, linear walking, and first-parent chain following.
+    """
 
     def test_linear_history_single_commit(self, simple_repo):
         """
@@ -22,10 +23,7 @@ class TestHistoryWalker:
         Ensures that a repository with one commit returns a list containing only that commit.
         """
         repo_path, commit_ids = simple_repo
-        git_repo = GitRepository(repo_path)
-        commits = git_repo.commits.get_all()
-
-        walker = HistoryWalker(commits)
+        walker = get_history_walker(repo_path)
         history = walker.get_linear_history_from_commit(commit_ids[0])
 
         assert len(history) == 1
@@ -38,11 +36,7 @@ class TestHistoryWalker:
         Ensures that a linear commit chain is traversed correctly in newest-first order.
         """
         repo_path, commit_ids = repo_with_history
-        git_repo = GitRepository(repo_path)
-        commits = git_repo.commits.get_all()
-
-        walker = HistoryWalker(commits)
-        # Start from the last (newest) commit
+        walker = get_history_walker(repo_path)
         history = walker.get_linear_history_from_commit(commit_ids[-1])
 
         assert len(history) == 5
@@ -57,10 +51,7 @@ class TestHistoryWalker:
         Ensures that traversal from a middle commit only includes ancestors.
         """
         repo_path, commit_ids = repo_with_history
-        git_repo = GitRepository(repo_path)
-        commits = git_repo.commits.get_all()
-
-        walker = HistoryWalker(commits)
+        walker = get_history_walker(repo_path)
         # Start from the 3rd commit (index 2)
         history = walker.get_linear_history_from_commit(commit_ids[2])
 
@@ -76,10 +67,7 @@ class TestHistoryWalker:
         Ensures that querying a non-existent commit returns an empty list.
         """
         repo_path, _ = simple_repo
-        git_repo = GitRepository(repo_path)
-        commits = git_repo.commits.get_all()
-
-        walker = HistoryWalker(commits)
+        walker = get_history_walker(repo_path)
         history = walker.get_linear_history_from_commit("0" * 40)
 
         assert not history
@@ -91,10 +79,7 @@ class TestHistoryWalker:
         Ensures that an empty repository returns an empty history.
         """
         repo_path, _ = empty_repo
-        git_repo = GitRepository(repo_path)
-        commits = git_repo.commits.get_all()
-
-        walker = HistoryWalker(commits)
+        walker = get_history_walker(repo_path)
         history = walker.get_linear_history_from_commit("0" * 40)
 
         assert not history
@@ -106,10 +91,7 @@ class TestHistoryWalker:
         Ensures that only the first parent chain is followed, ignoring merge parents.
         """
         repo_path, commit_ids = repo_with_merge
-        git_repo = GitRepository(repo_path)
-        commits = git_repo.commits.get_all()
-
-        walker = HistoryWalker(commits)
+        walker = get_history_walker(repo_path)
         # Start from merge commit
         merge_commit_id = commit_ids["merge"]
         history = walker.get_linear_history_from_commit(merge_commit_id)
@@ -132,10 +114,7 @@ class TestHistoryWalker:
         Ensures that returned commits have all expected attributes (message, author, etc.).
         """
         repo_path, commit_ids = repo_with_history
-        git_repo = GitRepository(repo_path)
-        commits = git_repo.commits.get_all()
-
-        walker = HistoryWalker(commits)
+        walker = get_history_walker(repo_path)
         history = walker.get_linear_history_from_commit(commit_ids[-1])
 
         for commit in history:
@@ -165,61 +144,9 @@ class TestHistoryWalker:
         Ensures correct history length when starting from different commits in the chain.
         """
         repo_path, commit_ids = repo_with_history
-        git_repo = GitRepository(repo_path)
-        commits = git_repo.commits.get_all()
-
-        walker = HistoryWalker(commits)
+        walker = get_history_walker(repo_path)
         history = walker.get_linear_history_from_commit(commit_ids[start_index])
 
         assert len(history) == expected_length
         # First commit in history should be the starting commit
         assert history[0].id == commit_ids[start_index]
-
-
-@pytest.fixture
-def repo_with_merge(empty_repo):
-    """
-    Create a repository with a merge commit.
-
-    Creates a base commit, then two branches (main and feature) that diverge and merge back together.
-    """
-
-    repo_path, repo = empty_repo
-    tree = repo.TreeBuilder().write()
-    author = pygit2.Signature("Test", "test@example.com")
-
-    # Create base commit
-    base = repo.create_commit(
-        "refs/heads/main", author, author, "Base commit", tree, []
-    )
-
-    # Create two commits on main
-    main1 = repo.create_commit(
-        "refs/heads/main", author, author, "Main commit 1", tree, [base]
-    )
-    main2 = repo.create_commit(
-        "refs/heads/main", author, author, "Main commit 2", tree, [main1]
-    )
-
-    # Create feature branch with one commit
-    feature1 = repo.create_commit(
-        "refs/heads/feature", author, author, "Feature commit 1", tree, [base]
-    )
-
-    # Create merge commit (first parent: main2, second parent: feature1)
-    merge = repo.create_commit(
-        "refs/heads/main",
-        author,
-        author,
-        "Merge feature into main",
-        tree,
-        [main2, feature1],
-    )
-
-    return repo_path, {
-        "base": str(base),
-        "main1": str(main1),
-        "main2": str(main2),
-        "feature1": str(feature1),
-        "merge": str(merge),
-    }

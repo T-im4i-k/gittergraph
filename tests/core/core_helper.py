@@ -8,8 +8,20 @@ Provides utility functions for constructing test objects, such as RefResolver, t
 
 
 from gittergraph.access import GitRepository
+from gittergraph.core.history_walker import HistoryWalker
 from gittergraph.core.ref_index import RefIndex
 from gittergraph.core.ref_resolver import RefResolver
+
+
+def get_history_walker(repo_path: str):
+    """
+    Create a HistoryWalker for a given repository path.
+
+    Loads all commits from the repository and constructs a HistoryWalker for history traversal tests.
+    """
+    git_repo = GitRepository(repo_path)
+    commits = git_repo.commits.get_all()
+    return HistoryWalker(commits)
 
 
 def get_ref_resolver(

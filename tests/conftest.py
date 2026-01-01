@@ -225,3 +225,52 @@ def repo_with_multiple_tags(empty_repo):
     repo.create_reference("refs/tags/latest", c2)
 
     return repo_path, [str(c1), str(c2)]
+
+
+@pytest.fixture
+def repo_with_merge(empty_repo):
+    """
+    Create a repository with a merge commit.
+
+    Creates a base commit, then two branches (main and feature) that diverge and merge back together.
+    """
+
+    repo_path, repo = empty_repo
+    tree = repo.TreeBuilder().write()
+    author = pygit2.Signature("Test", "test@example.com")
+
+    # Create base commit
+    base = repo.create_commit(
+        "refs/heads/main", author, author, "Base commit", tree, []
+    )
+
+    # Create two commits on main
+    main1 = repo.create_commit(
+        "refs/heads/main", author, author, "Main commit 1", tree, [base]
+    )
+    main2 = repo.create_commit(
+        "refs/heads/main", author, author, "Main commit 2", tree, [main1]
+    )
+
+    # Create feature branch with one commit
+    feature1 = repo.create_commit(
+        "refs/heads/feature", author, author, "Feature commit 1", tree, [base]
+    )
+
+    # Create merge commit (first parent: main2, second parent: feature1)
+    merge = repo.create_commit(
+        "refs/heads/main",
+        author,
+        author,
+        "Merge feature into main",
+        tree,
+        [main2, feature1],
+    )
+
+    return repo_path, {
+        "base": str(base),
+        "main1": str(main1),
+        "main2": str(main2),
+        "feature1": str(feature1),
+        "merge": str(merge),
+    }
