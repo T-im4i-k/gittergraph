@@ -7,7 +7,7 @@ Tests initialization, discovery, reload, and is_empty functionality using pytest
 
 import pygit2
 
-from gittergraph.access.git_repository import GitRepository
+from gittergraph.access.repository import GitRepository
 
 
 def test_init_and_access_layers(simple_repo):
