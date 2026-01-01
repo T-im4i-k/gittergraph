@@ -8,6 +8,7 @@ Provides utility functions for constructing test objects, such as RefResolver, t
 
 
 from gittergraph.access import GitRepository
+from gittergraph.core.graph_data import GitGraphData
 from gittergraph.core.history_walker import HistoryWalker
 from gittergraph.core.ref_index import RefIndex
 from gittergraph.core.ref_resolver import RefResolver
@@ -53,3 +54,13 @@ def get_ref_index(repo_path: str) -> RefIndex:
     branches = git_repo.branches.get_all()
     tags = git_repo.tags.get_all()
     return RefIndex(branches, tags)
+
+
+def get_graph_data(repo_path: str) -> GitGraphData:
+    """
+    Create a GitGraphData for a given repository path.
+
+    Loads repository data and constructs an immutable GitGraphData snapshot.
+    """
+    git_repo = GitRepository(repo_path)
+    return GitGraphData.load_from(git_repo)
