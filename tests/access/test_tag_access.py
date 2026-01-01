@@ -1,5 +1,10 @@
-# tests/access/test_tag_access.py
-"""Tests for TagAccess class."""
+# @generated "partially" Claude-Sonnet-4.5: Code
+# @generated "partially" ChatGPT-4.1: Documentation
+"""
+TagAccess tests.
+
+Unit tests for the TagAccess class, covering tag lookup, retrieval, and edge cases for various repository structures.
+"""
 
 import pygit2
 import pytest
@@ -9,10 +14,18 @@ from gittergraph.models import Tag
 
 
 class TestToModel:
-    """Tests for to_model method."""
+    """
+    Tests for to_model method.
+
+    Covers conversion of repository tag references to Tag model objects.
+    """
 
     def test_converts_lightweight_tag(self, repo_with_lightweight_tag):
-        """Test converting a lightweight tag to model."""
+        """
+        Convert a lightweight tag to model.
+
+        Returns a Tag object for a lightweight tag reference.
+        """
         repo_path, commit_ids = repo_with_lightweight_tag
         repo = pygit2.Repository(str(repo_path))
 
@@ -26,7 +39,11 @@ class TestToModel:
         assert tag.shorthand == "v1.0.0"
 
     def test_converts_annotated_tag(self, repo_with_annotated_tag):
-        """Test converting an annotated tag to model."""
+        """
+        Convert an annotated tag to model.
+
+        Returns a Tag object for an annotated tag reference.
+        """
         repo_path, commit_ids = repo_with_annotated_tag
         repo = pygit2.Repository(str(repo_path))
 
@@ -40,7 +57,11 @@ class TestToModel:
         assert tag.shorthand == "v2.0.0"
 
     def test_raises_valueerror_for_non_tag_reference(self, empty_repo):
-        """Test that non-tag references raise ValueError."""
+        """
+        Raise ValueError for non-tag reference.
+
+        Ensures ValueError is raised when converting a non-tag reference.
+        """
         repo_path, repo = empty_repo
 
         # Create a tree object
@@ -57,10 +78,18 @@ class TestToModel:
 
 
 class TestGet:
-    """Tests for get method."""
+    """
+    Tests for get method.
+
+    Covers retrieval of tags by full reference name.
+    """
 
     def test_get_existing_lightweight_tag(self, repo_with_lightweight_tag):
-        """Test getting an existing lightweight tag."""
+        """
+        Get an existing lightweight tag.
+
+        Returns the Tag object for the given lightweight tag reference.
+        """
         repo_path, commit_ids = repo_with_lightweight_tag
         access = TagAccess(repo_path)
 
@@ -71,7 +100,11 @@ class TestGet:
         assert tag.shorthand == "v1.0.0"
 
     def test_get_existing_annotated_tag(self, repo_with_annotated_tag):
-        """Test getting an existing annotated tag."""
+        """
+        Get an existing annotated tag.
+
+        Returns the Tag object for the given annotated tag reference.
+        """
         repo_path, commit_ids = repo_with_annotated_tag
         access = TagAccess(repo_path)
 
@@ -91,7 +124,11 @@ class TestGet:
         ],
     )
     def test_get_various_tag_names(self, tmp_path, tag_name):
-        """Test getting tags with various naming conventions."""
+        """
+        Get tags with various naming conventions.
+
+        Returns Tag objects for tags with different naming patterns.
+        """
         repo_path = tmp_path / "test_repo"
         repo = pygit2.init_repository(str(repo_path))
 
@@ -109,7 +146,11 @@ class TestGet:
         assert tag.target_id == str(id_)
 
     def test_get_nonexistent_tag_raises_keyerror(self, simple_repo):
-        """Test that getting non-existent tag raises KeyError."""
+        """
+        Get a non-existent tag.
+
+        Ensures KeyError is raised for a tag reference that does not exist.
+        """
         repo_path, _ = simple_repo
         access = TagAccess(repo_path)
 
@@ -118,10 +159,18 @@ class TestGet:
 
 
 class TestGetAll:
-    """Tests for get_all method."""
+    """
+    Tests for get_all method.
+
+    Covers retrieval of all tags in the repository.
+    """
 
     def test_get_all_single_lightweight_tag(self, repo_with_lightweight_tag):
-        """Test get_all with single lightweight tag."""
+        """
+        Get all tags with a single lightweight tag.
+
+        Returns a dictionary with one lightweight tag.
+        """
         repo_path, commit_oids = repo_with_lightweight_tag
         access = TagAccess(repo_path)
 
@@ -132,7 +181,11 @@ class TestGetAll:
         assert tags["refs/tags/v1.0.0"].target_id == commit_oids[0]
 
     def test_get_all_single_annotated_tag(self, repo_with_annotated_tag):
-        """Test get_all with single annotated tag."""
+        """
+        Get all tags with a single annotated tag.
+
+        Returns a dictionary with one annotated tag.
+        """
         repo_path, commit_oids = repo_with_annotated_tag
         access = TagAccess(repo_path)
 
@@ -143,7 +196,11 @@ class TestGetAll:
         assert tags["refs/tags/v2.0.0"].target_id == commit_oids[0]
 
     def test_get_all_multiple_tags(self, repo_with_multiple_tags):
-        """Test get_all with multiple tags."""
+        """
+        Get all tags with multiple tags present.
+
+        Returns a dictionary with all tag references.
+        """
         repo_path, commit_oids = repo_with_multiple_tags
         access = TagAccess(repo_path)
 
@@ -159,7 +216,11 @@ class TestGetAll:
         assert tags["refs/tags/latest"].target_id == commit_oids[1]
 
     def test_get_all_empty_repo(self, empty_repo):
-        """Test get_all with repository without tags."""
+        """
+        Get all tags in an empty repository.
+
+        Returns an empty dictionary when no tags exist.
+        """
         repo_path, _ = empty_repo
         access = TagAccess(repo_path)
 
@@ -168,7 +229,11 @@ class TestGetAll:
         assert len(tags) == 0
 
     def test_get_all_returns_dict_keyed_by_full_name(self, repo_with_multiple_tags):
-        """Test that get_all returns dict keyed by full ref names."""
+        """
+        Get all tags and verify dictionary keys.
+
+        Returns a dictionary keyed by full tag reference names.
+        """
         repo_path, _ = repo_with_multiple_tags
         access = TagAccess(repo_path)
 
@@ -181,7 +246,11 @@ class TestGetAll:
 
     @pytest.mark.parametrize("tag_count", [1, 5, 10])
     def test_get_all_with_multiple_tags_count(self, tmp_path, tag_count):
-        """Test get_all with varying numbers of tags."""
+        """
+        Get all tags with varying numbers of tags.
+
+        Returns a dictionary with the expected number of tags.
+        """
         repo_path = tmp_path / "test_repo"
         repo = pygit2.init_repository(str(repo_path))
 
@@ -199,10 +268,18 @@ class TestGetAll:
 
 
 class TestTagProperties:
-    """Tests for Tag model properties via TagAccess."""
+    """
+    Tests for Tag model properties via TagAccess.
+
+    Covers shorthand property and multiple tags on the same commit.
+    """
 
     def test_tag_shorthand_property(self, repo_with_lightweight_tag):
-        """Test the shorthand property of Tag."""
+        """
+        Test the shorthand property of Tag.
+
+        Returns the shorthand for a lightweight tag.
+        """
         repo_path, _ = repo_with_lightweight_tag
         access = TagAccess(repo_path)
 
@@ -212,7 +289,11 @@ class TestTagProperties:
         assert tag.name == "refs/tags/v1.0.0"
 
     def test_tags_on_same_commit(self, tmp_path):
-        """Test multiple tags pointing to the same commit."""
+        """
+        Test multiple tags pointing to the same commit.
+
+        Returns all tags that reference the same commit.
+        """
         repo_path = tmp_path / "test_repo"
         repo = pygit2.init_repository(str(repo_path))
 
