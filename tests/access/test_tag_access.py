@@ -123,27 +123,23 @@ class TestGet:
             "stable",
         ],
     )
-    def test_get_various_tag_names(self, tmp_path, tag_name):
+    def test_get_various_tag_names(self, simple_repo, tag_name):
         """
         Get tags with various naming conventions.
 
         Returns Tag objects for tags with different naming patterns.
         """
-        repo_path = tmp_path / "test_repo"
-        repo = pygit2.init_repository(str(repo_path))
+        repo_path, commit_ids = simple_repo
+        repo = pygit2.Repository(str(repo_path))
 
-        tree = repo.TreeBuilder().write()
-        author = pygit2.Signature("Test", "test@example.com")
-        id_ = repo.create_commit("refs/heads/main", author, author, "Commit", tree, [])
-
-        repo.create_reference(f"refs/tags/{tag_name}", id_)
+        repo.create_reference(f"refs/tags/{tag_name}", commit_ids[0])
 
         access = TagAccess(repo_path)
         tag = access.get(f"refs/tags/{tag_name}")
 
         assert tag.name == f"refs/tags/{tag_name}"
         assert tag.shorthand == tag_name
-        assert tag.target_id == str(id_)
+        assert tag.target_id == str(commit_ids[0])
 
     def test_get_nonexistent_tag_raises_keyerror(self, simple_repo):
         """
@@ -245,21 +241,17 @@ class TestGetAll:
             assert key.startswith("refs/tags/")
 
     @pytest.mark.parametrize("tag_count", [1, 5, 10])
-    def test_get_all_with_multiple_tags_count(self, tmp_path, tag_count):
+    def test_get_all_with_multiple_tags_count(self, simple_repo, tag_count):
         """
         Get all tags with varying numbers of tags.
 
         Returns a dictionary with the expected number of tags.
         """
-        repo_path = tmp_path / "test_repo"
-        repo = pygit2.init_repository(str(repo_path))
-
-        tree = repo.TreeBuilder().write()
-        author = pygit2.Signature("Test", "test@example.com")
-        id_ = repo.create_commit("refs/heads/main", author, author, "Commit", tree, [])
+        repo_path, commit_ids = simple_repo
+        repo = pygit2.Repository(str(repo_path))
 
         for i in range(tag_count):
-            repo.create_reference(f"refs/tags/v{i}.0.0", id_)
+            repo.create_reference(f"refs/tags/v{i}.0.0", commit_ids[0])
 
         access = TagAccess(repo_path)
         tags = access.get_all()
@@ -288,23 +280,19 @@ class TestTagProperties:
         assert tag.shorthand == "v1.0.0"
         assert tag.name == "refs/tags/v1.0.0"
 
-    def test_tags_on_same_commit(self, tmp_path):
+    def test_tags_on_same_commit(self, simple_repo):
         """
         Test multiple tags pointing to the same commit.
 
         Returns all tags that reference the same commit.
         """
-        repo_path = tmp_path / "test_repo"
-        repo = pygit2.init_repository(str(repo_path))
-
-        tree = repo.TreeBuilder().write()
-        author = pygit2.Signature("Test", "test@example.com")
-        id_ = repo.create_commit("refs/heads/main", author, author, "Commit", tree, [])
+        repo_path, commit_ids = simple_repo
+        repo = pygit2.Repository(str(repo_path))
 
         # Create multiple tags on same commit
-        repo.create_reference("refs/tags/v1.0.0", id_)
-        repo.create_reference("refs/tags/stable", id_)
-        repo.create_reference("refs/tags/latest", id_)
+        repo.create_reference("refs/tags/v1.0.0", commit_ids[0])
+        repo.create_reference("refs/tags/stable", commit_ids[0])
+        repo.create_reference("refs/tags/latest", commit_ids[0])
 
         access = TagAccess(repo_path)
         tags = access.get_all()
@@ -312,4 +300,4 @@ class TestTagProperties:
         assert len(tags) == 3
         # All should point to same commit
         target_ids = [tag.target_id for tag in tags.values()]
-        assert all(tid == str(id_) for tid in target_ids)
+        assert all(tid == str(commit_ids[0]) for tid in target_ids)
