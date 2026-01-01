@@ -34,11 +34,11 @@ def simple_repo(empty_repo):
 
     tree = repo.TreeBuilder().write()
     author = pygit2.Signature("Alice", "alice@example.com", 1234567890, 60)
-    commit_oid = repo.create_commit(
+    commit_id = repo.create_commit(
         "refs/heads/main", author, author, "Initial commit", tree, []
     )
 
-    return repo_path, [str(commit_oid)]
+    return repo_path, [str(commit_id)]
 
 
 @pytest.fixture
@@ -53,11 +53,11 @@ def repo_different_author_and_commiter(empty_repo):
     tree = repo.TreeBuilder().write()
     author = pygit2.Signature("Alice", "alice@example.com", 1234567890, 60)
     commiter = pygit2.Signature("Bob", "bob@example.com", 1234567900, -60)
-    commit_oid = repo.create_commit(
+    commit_id = repo.create_commit(
         "refs/heads/main", author, commiter, "Initial commit", tree, []
     )
 
-    return repo_path, [str(commit_oid)]
+    return repo_path, [str(commit_id)]
 
 
 @pytest.fixture
@@ -77,12 +77,12 @@ def repo_with_history(empty_repo):
         )
         parent = [commit_ids[-1]] if commit_ids else []
 
-        oid = repo.create_commit(
+        id_ = repo.create_commit(
             "refs/heads/main", author, author, f"Commit {i}", tree, parent
         )
-        commit_ids.append(oid)
+        commit_ids.append(id_)
 
-    return repo_path, [str(oid) for oid in commit_ids]
+    return repo_path, [str(id_) for id_ in commit_ids]
 
 
 @pytest.fixture
@@ -144,10 +144,10 @@ def repo_with_remote_tracking(tmp_path):
 
     tree = repo.TreeBuilder().write()
     author = pygit2.Signature("Test", "test@example.com")
-    oid = repo.create_commit("refs/heads/main", author, author, "Commit", tree, [])
-    repo.create_reference("refs/remotes/origin/main", oid)
+    id_ = repo.create_commit("refs/heads/main", author, author, "Commit", tree, [])
+    repo.create_reference("refs/remotes/origin/main", id_)
 
-    return repo_path, [str(oid)]
+    return repo_path, [str(id_)]
 
 
 @pytest.fixture
@@ -184,12 +184,12 @@ def repo_with_lightweight_tag(empty_repo):
 
     tree = repo.TreeBuilder().write()
     author = pygit2.Signature("Test", "test@example.com")
-    oid = repo.create_commit("refs/heads/main", author, author, "Commit", tree, [])
+    id_ = repo.create_commit("refs/heads/main", author, author, "Commit", tree, [])
 
     # Create lightweight tag
-    repo.create_reference("refs/tags/v1.0.0", oid)
+    repo.create_reference("refs/tags/v1.0.0", id_)
 
-    return repo_path, [str(oid)]
+    return repo_path, [str(id_)]
 
 
 @pytest.fixture

@@ -125,14 +125,14 @@ class TestGet:
 
         tree = repo.TreeBuilder().write()
         author = pygit2.Signature("Test", "test@example.com")
-        oid = repo.create_commit(branch_name, author, author, "Commit", tree, [])
+        id_ = repo.create_commit(branch_name, author, author, "Commit", tree, [])
 
         access = BranchAccess(repo_path)
         branch = access.get(branch_name)
 
         assert branch.name == branch_name
         assert branch.shorthand == branch_name.removeprefix("refs/heads/")
-        assert branch.target_id == str(oid)
+        assert branch.target_id == str(id_)
 
 
 class TestGetAll:

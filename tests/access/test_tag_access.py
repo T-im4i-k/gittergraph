@@ -65,10 +65,10 @@ class TestToModel:
         repo_path, repo = empty_repo
 
         # Create a tree object
-        tree_oid = repo.TreeBuilder().write()
+        tree_id = repo.TreeBuilder().write()
 
         # Create a reference to the tree (not a valid tag)
-        repo.create_reference("refs/tags/invalid", tree_oid)
+        repo.create_reference("refs/tags/invalid", tree_id)
 
         ref = repo.references["refs/tags/invalid"]
         access = TagAccess(repo_path)
@@ -171,14 +171,14 @@ class TestGetAll:
 
         Returns a dictionary with one lightweight tag.
         """
-        repo_path, commit_oids = repo_with_lightweight_tag
+        repo_path, commit_ids = repo_with_lightweight_tag
         access = TagAccess(repo_path)
 
         tags = access.get_all()
 
         assert len(tags) == 1
         assert "refs/tags/v1.0.0" in tags
-        assert tags["refs/tags/v1.0.0"].target_id == commit_oids[0]
+        assert tags["refs/tags/v1.0.0"].target_id == commit_ids[0]
 
     def test_get_all_single_annotated_tag(self, repo_with_annotated_tag):
         """
@@ -186,14 +186,14 @@ class TestGetAll:
 
         Returns a dictionary with one annotated tag.
         """
-        repo_path, commit_oids = repo_with_annotated_tag
+        repo_path, commit_ids = repo_with_annotated_tag
         access = TagAccess(repo_path)
 
         tags = access.get_all()
 
         assert len(tags) == 1
         assert "refs/tags/v2.0.0" in tags
-        assert tags["refs/tags/v2.0.0"].target_id == commit_oids[0]
+        assert tags["refs/tags/v2.0.0"].target_id == commit_ids[0]
 
     def test_get_all_multiple_tags(self, repo_with_multiple_tags):
         """
@@ -201,7 +201,7 @@ class TestGetAll:
 
         Returns a dictionary with all tag references.
         """
-        repo_path, commit_oids = repo_with_multiple_tags
+        repo_path, commit_ids = repo_with_multiple_tags
         access = TagAccess(repo_path)
 
         tags = access.get_all()
@@ -211,9 +211,9 @@ class TestGetAll:
         assert "refs/tags/v2.0.0" in tags
         assert "refs/tags/latest" in tags
 
-        assert tags["refs/tags/v1.0.0"].target_id == commit_oids[0]
-        assert tags["refs/tags/v2.0.0"].target_id == commit_oids[1]
-        assert tags["refs/tags/latest"].target_id == commit_oids[1]
+        assert tags["refs/tags/v1.0.0"].target_id == commit_ids[0]
+        assert tags["refs/tags/v2.0.0"].target_id == commit_ids[1]
+        assert tags["refs/tags/latest"].target_id == commit_ids[1]
 
     def test_get_all_empty_repo(self, empty_repo):
         """
