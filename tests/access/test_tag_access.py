@@ -64,7 +64,7 @@ class TestGet:
         repo_path, commit_ids = repo_with_lightweight_tag
         access = TagAccess(repo_path)
 
-        tag = access.get("v1.0.0")
+        tag = access.get("refs/tags/v1.0.0")
 
         assert tag.name == "refs/tags/v1.0.0"
         assert tag.target_id == commit_ids[0]
@@ -75,7 +75,7 @@ class TestGet:
         repo_path, commit_ids = repo_with_annotated_tag
         access = TagAccess(repo_path)
 
-        tag = access.get("v2.0.0")
+        tag = access.get("refs/tags/v2.0.0")
 
         assert tag.name == "refs/tags/v2.0.0"
         assert tag.target_id == commit_ids[0]
@@ -102,7 +102,7 @@ class TestGet:
         repo.create_reference(f"refs/tags/{tag_name}", id_)
 
         access = TagAccess(repo_path)
-        tag = access.get(tag_name)
+        tag = access.get(f"refs/tags/{tag_name}")
 
         assert tag.name == f"refs/tags/{tag_name}"
         assert tag.shorthand == tag_name
@@ -114,7 +114,7 @@ class TestGet:
         access = TagAccess(repo_path)
 
         with pytest.raises(KeyError):
-            access.get("nonexistent")
+            access.get("refs/tags/nonexistent")
 
 
 class TestGetAll:
@@ -206,7 +206,7 @@ class TestTagProperties:
         repo_path, _ = repo_with_lightweight_tag
         access = TagAccess(repo_path)
 
-        tag = access.get("v1.0.0")
+        tag = access.get("refs/tags/v1.0.0")
 
         assert tag.shorthand == "v1.0.0"
         assert tag.name == "refs/tags/v1.0.0"

@@ -54,12 +54,11 @@ class TagAccess(BaseAccess):
 
         return tags
 
-    def get(self, shorthand: str) -> Tag:
+    def get(self, name: str) -> Tag:
         """
-        Get a tag by its shorthand name.
+        Get a tag by its full reference name.
 
-        Retrieves a tag object by its shorthand and converts it to the Tag model.
+        Retrieves a tag object by its full name and converts it to the Tag model.
         """
-        ref_name: str = f"refs/tags/{shorthand}"
-        ref: pygit2.Reference = self._repo.references[ref_name]
+        ref: pygit2.Reference = self._repo.references[name]
         return self.to_model(ref)
