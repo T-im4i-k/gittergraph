@@ -21,6 +21,7 @@ dev = [
     "black",
     "mypy",
     "isort",
+    "pytest-asyncio",
 ]
 
 [project.scripts]
@@ -34,3 +35,6 @@ disable = ["C0301", "C0103"]
 
 [tool.isort]
 profile = "black"
+
+[tool.pytest.ini_options]
+asyncio_default_fixture_loop_scope = "function"
