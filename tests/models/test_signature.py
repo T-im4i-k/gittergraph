@@ -7,7 +7,8 @@ Covers signature formatting and datetime conversion logic.
 from datetime import datetime, timedelta, timezone
 
 import pytest
-from models_helper import make_signature
+
+from tests.make_models_helper import make_signature
 
 
 @pytest.mark.parametrize(

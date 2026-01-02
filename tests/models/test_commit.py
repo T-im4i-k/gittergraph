@@ -7,9 +7,9 @@ Covers commit property logic including merge/root detection and message handling
 
 
 import pytest
-from models_helper import make_signature
 
 from gittergraph.models import Commit
+from tests.make_models_helper import make_signature
 
 
 @pytest.mark.parametrize(
