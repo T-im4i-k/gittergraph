@@ -65,3 +65,12 @@ class Commit:
         Returns True if the commit has no parents.
         """
         return len(self.parent_ids) == 0
+
+    @property
+    def author_is_committer(self) -> bool:
+        """
+        Check if author and committer are the same.
+
+        Returns True if the author and committer signatures are identical.
+        """
+        return self.author == self.committer
