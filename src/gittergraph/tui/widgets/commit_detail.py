@@ -26,39 +26,34 @@ class CommitDetail(VerticalScroll):
         """
         Initialize the CommitDetail widget.
 
-        Sets up the widget for displaying commit details.
+        Sets up the widget for displaying commit details. The content widget is created in compose().
         """
         super().__init__(**kwargs)
         self.commit: Commit | None = None
-        self._content_widget: Static | None = None
 
-    def on_mount(self) -> None:
+    def compose(self):
         """
-        Mount the content widget.
+        Yield the Static widget for displaying commit details.
 
-        Prepares the widget for displaying commit details.
+        This method is called by Textual to build the widget tree.
         """
-        self._content_widget = Static(CommitDetail.DEFAULT_TEXT)
-        self.mount(self._content_widget)
+        yield Static(CommitDetail.DEFAULT_TEXT)
 
     def show(self, commit: Commit) -> None:
         """
         Display details for a commit.
 
-        Updates the widget to show the given commit's details.
+        Updates the internal commit reference and updates the Static child with commit details.
         """
-        if not self._content_widget:
-            return
-
         self.commit = commit
-        content: Text = self._get_text()
-        self._content_widget.update(content)
+        text: Text = self._get_text()
+        self.query_one(Static).update(text)
 
     def _get_text(self) -> Text:
         """
         Build the rich Text object with commit details.
 
-        Returns a rich Text object containing commit metadata and message.
+        Returns a rich Text object containing commit metadata and message, or the default text if no commit is set.
         """
         if not self.commit:
             return Text(CommitDetail.DEFAULT_TEXT)
@@ -95,8 +90,7 @@ class CommitDetail(VerticalScroll):
         """
         Clear the detail view.
 
-        Resets the widget to its default state.
+        Resets the internal commit reference and updates the Static child to show the default text.
         """
         self.commit = None
-        if self._content_widget:
-            self._content_widget.update(CommitDetail.DEFAULT_TEXT)
+        self.query_one(Static).update(CommitDetail.DEFAULT_TEXT)

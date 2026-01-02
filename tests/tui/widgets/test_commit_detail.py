@@ -29,38 +29,9 @@ def test_commit_detail_initialization():
     """
     Test CommitDetail widget initialization.
 
-    Checks that widget initializes with None commit and no content widget.
+    Checks that widget initializes with None commit.
     """
     widget = CommitDetail()
-    assert widget.commit is None
-    assert widget._content_widget is None
-
-
-def test_commit_detail_show_without_content_widget():
-    """
-    Test CommitDetail show method when content widget is not mounted.
-
-    Checks that show returns early if content widget is None.
-    """
-    widget = CommitDetail()
-    commit = make_commit()
-
-    # Should not raise an error, but commit should not be set
-    widget.show(commit)
-    assert widget.commit is None
-
-
-def test_commit_detail_clear_without_content_widget():
-    """
-    Test CommitDetail clear method when content widget is None.
-
-    Checks that clear handles missing content widget gracefully.
-    """
-    widget = CommitDetail()
-    widget.commit = make_commit()
-
-    # Should not raise an error
-    widget.clear()
     assert widget.commit is None
 
 
@@ -210,17 +181,20 @@ async def test_commit_detail_clear_with_app():
 
 
 @pytest.mark.asyncio
-async def test_commit_detail_on_mount_with_app():
+async def test_commit_detail_compose_with_app():
     """
-    Test on_mount method with a running app.
+    Test compose method with a running app.
 
-    Checks that content widget is created and initialized on mount.
+    Checks that Static widget is created and initialized with default text.
     """
+    from textual.widgets import Static
+
     app = CommitDetailTestApp()
     async with app.run_test() as pilot:
         widget = app.query_one(CommitDetail)
+        static = widget.query_one(Static)
 
-        assert widget._content_widget is not None
+        assert static is not None
         await pilot.pause()
 
 
