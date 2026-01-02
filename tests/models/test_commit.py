@@ -86,3 +86,24 @@ def test_commit_short_message(message, expected_short_message):
         parent_ids=[],
     )
     assert c.short_message == expected_short_message
+
+
+@pytest.mark.parametrize(
+    "author,committer,expected",
+    [
+        (make_signature, make_signature, True),
+        (make_signature, lambda: make_signature(name="Other"), False),
+    ],
+)
+def test_commit_author_is_committer(author, committer, expected):
+    """
+    Test Commit author_is_committer property using parametrize.
+    """
+    c = Commit(
+        id="id",
+        message="msg",
+        author=author(),
+        committer=committer(),
+        parent_ids=[],
+    )
+    assert c.author_is_committer is expected
