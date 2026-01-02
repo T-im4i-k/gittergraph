@@ -6,9 +6,9 @@ Tests reference name resolution functionality, including HEAD, commit IDs, branc
 """
 import pygit2
 import pytest
-from core_helper import get_ref_resolver
 
 from gittergraph.access import GitRepository
+from tests.core.core_helper import get_ref_resolver
 
 
 class TestRefResolver:

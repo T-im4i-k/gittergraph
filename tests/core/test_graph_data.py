@@ -6,10 +6,10 @@ Unit tests for the GitGraphData dataclass, covering data loading, immutability, 
 """
 import pygit2
 import pytest
-from core_helper import get_graph_data
 
 from gittergraph.access import GitRepository
 from gittergraph.core.graph_data import GitGraphData
+from tests.core.core_helper import get_graph_data
 
 
 class TestGitGraphData:
