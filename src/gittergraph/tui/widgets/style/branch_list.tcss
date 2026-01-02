@@ -1,0 +1,18 @@
+/* @generated "all" Claude-Sonnet-4.5 */
+BranchList {
+    width: 30;
+    border: solid $primary;
+    overflow-y: auto;
+    scrollbar-size: 0 0;
+}
+
+BranchList > ListView {
+    height: 100%;
+    scrollbar-size: 0 0;
+}
+
+.branch-item {
+    height: auto;
+    padding: 0 1;
+    color: $success;
+}
