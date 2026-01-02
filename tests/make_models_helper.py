@@ -5,7 +5,19 @@ Helpers for model tests.
 Provides utility functions for constructing model objects in tests.
 """
 
-from gittergraph.models import Commit, Signature
+from gittergraph.models import Branch, Commit, Signature
+
+
+def make_branch(**kwargs):
+    """
+    Create a Branch instance for testing.
+
+    Returns a Branch with default or provided attributes.
+    """
+    return Branch(
+        target_id=kwargs.get("target_id", "abc1234567890"),
+        name=kwargs.get("name", "refs/heads/main"),
+    )
 
 
 def make_signature(**kwargs):
