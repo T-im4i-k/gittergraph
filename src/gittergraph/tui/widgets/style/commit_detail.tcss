@@ -1,0 +1,11 @@
+/* @generated "all" Claude-Sonnet-4.5 */
+CommitDetail {
+    width: 1fr;
+    border: solid $primary;
+    padding: 1;
+    scrollbar-size: 0 0;
+}
+
+CommitDetail > Static {
+    width: 100%;
+}
