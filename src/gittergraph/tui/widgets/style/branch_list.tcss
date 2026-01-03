@@ -2,6 +2,7 @@
 BranchList {
     width: 30;
     border: solid $primary;
+    border-title: "Branches";
     overflow-y: auto;
     scrollbar-size: 0 0;
 }
