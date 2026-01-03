@@ -5,7 +5,20 @@ Helpers for model tests.
 Provides utility functions for constructing model objects in tests.
 """
 
-from gittergraph.models import Branch, Commit, Signature, Tag
+from gittergraph.models import Branch, Commit, HeadInfo, HeadState, Signature, Tag
+
+
+def make_head(**kwargs):
+    """
+    Create a HeadInfo instance for testing.
+
+    Returns a HeadInfo with default or provided attributes.
+    """
+    return HeadInfo(
+        state=kwargs.get("state", HeadState.NORMAL),
+        target_id=kwargs.get("target_id", "abc1234567890"),
+        branch_name=kwargs.get("branch_name", "refs/heads/main"),
+    )
 
 
 def make_branch(**kwargs):
