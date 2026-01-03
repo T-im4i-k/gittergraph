@@ -7,6 +7,6 @@ This package contains reusable UI components for displaying and interacting with
 
 from .branch_list import BranchList
 from .commit_detail import CommitDetail
-from .commit_list import CommitList
+from .commit_history import CommitHistory
 from .head_detail import HeadDetail
 from .tag_list import TagList

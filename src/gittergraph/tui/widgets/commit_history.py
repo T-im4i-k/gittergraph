@@ -2,7 +2,7 @@
 """
 Commit list widget for the TUI.
 
-Displays a selectable list of commits in a vertical layout for the TUI, including branch and tag decorations.
+Displays a selectable history of commits in a vertical layout for the TUI, including branch and tag decorations.
 """
 
 from rich.text import Text
@@ -13,23 +13,23 @@ from textual.widgets import Label, ListItem, ListView
 from gittergraph.models import Branch, Commit, Tag
 
 
-class CommitList(Vertical):
+class CommitHistory(Vertical):
     """
-    Widget for displaying a list of commits in the TUI.
+    Widget for displaying commit history in the TUI.
 
     Shows commit short IDs, messages, and decorations for branches and tags in a selectable list.
     Posts a message when a commit is selected.
     """
 
     DEFAULT_CSS = """
-    CommitList {
+    CommitHistory {
         width: 1fr;
         border: solid $primary;
         overflow-y: auto;
         scrollbar-size: 0 0;
     }
 
-    CommitList > ListView {
+    CommitHistory > ListView {
         height: 100%;
         scrollbar-size: 0 0;
     }
@@ -57,9 +57,9 @@ class CommitList(Vertical):
 
     def __init__(self, **kwargs) -> None:
         """
-        Initialize the CommitList widget.
+        Initialize the CommitHistory widget.
 
-        Sets up the widget for displaying a list of commits with branch and tag decorations.
+        Sets up the widget for displaying a history of commits with branch and tag decorations.
         """
         super().__init__(**kwargs)
         self.commits: list[Commit] = []
@@ -81,7 +81,7 @@ class CommitList(Vertical):
         tags_by_commit: dict[str, list[Tag]],
     ) -> None:
         """
-        Display a list of commits with branch and tag decorations.
+        Display a history of commits with branch and tag decorations.
 
         Updates the ListView with the provided commits and their associated branches and tags.
         """
@@ -103,7 +103,7 @@ class CommitList(Vertical):
         Returns a styled Label widget for the given commit.
         """
         header: Text = self._get_header_text(commit)
-        body: Text = CommitList._get_body_text(commit)
+        body: Text = CommitHistory._get_body_text(commit)
 
         label = Label(header + body)
         label.add_class("commit-item")

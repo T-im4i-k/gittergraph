@@ -1,6 +1,6 @@
 # @generated "all" Claude-Sonnet-4.5
 """
-Tests for the CommitList widget.
+Tests for the CommitHistory widget.
 
 Covers commit list display, selection, decorations, and event handling.
 """
@@ -9,29 +9,29 @@ import pytest
 from textual.app import App, ComposeResult
 from textual.widgets import Label, ListView
 
-from gittergraph.tui.widgets.commit_list import CommitList
+from gittergraph.tui.widgets.commit_history import CommitHistory
 from tests.make_models_helper import make_branch, make_commit, make_signature, make_tag
 
 
 class CommitListTestApp(App):
     """
-    Minimal test app for CommitList widget.
+    Minimal test app for CommitHistory widget.
 
     Provides a simple app context for testing widget behavior.
     """
 
     def compose(self) -> ComposeResult:
-        """Compose the test app with a CommitList widget."""
-        yield CommitList()
+        """Compose the test app with a CommitHistory widget."""
+        yield CommitHistory()
 
 
 def test_commit_list_initialization():
     """
-    Test CommitList widget initialization.
+    Test CommitHistory widget initialization.
 
     Checks that widget initializes with empty commit, branch, and tag lists.
     """
-    widget = CommitList()
+    widget = CommitHistory()
     assert widget.commits == []
     assert widget.branches_by_commit == {}
     assert widget.tags_by_commit == {}
@@ -46,7 +46,7 @@ async def test_commit_list_compose_with_app():
     """
     app = CommitListTestApp()
     async with app.run_test() as pilot:
-        widget = app.query_one(CommitList)
+        widget = app.query_one(CommitHistory)
         list_view = widget.query_one(ListView)
 
         assert list_view is not None
@@ -62,7 +62,7 @@ async def test_commit_list_show_empty_list():
     """
     app = CommitListTestApp()
     async with app.run_test() as pilot:
-        widget = app.query_one(CommitList)
+        widget = app.query_one(CommitHistory)
         list_view = widget.query_one(ListView)
 
         widget.show([], {}, {})
@@ -83,7 +83,7 @@ async def test_commit_list_show_single_commit():
     """
     app = CommitListTestApp()
     async with app.run_test() as pilot:
-        widget = app.query_one(CommitList)
+        widget = app.query_one(CommitHistory)
         list_view = widget.query_one(ListView)
 
         commit = make_commit(id="abc1234567890abcdef", message="Initial commit")
@@ -103,7 +103,7 @@ async def test_commit_list_show_multiple_commits():
     """
     app = CommitListTestApp()
     async with app.run_test() as pilot:
-        widget = app.query_one(CommitList)
+        widget = app.query_one(CommitHistory)
         list_view = widget.query_one(ListView)
 
         commits = [
@@ -127,7 +127,7 @@ async def test_commit_list_show_with_branches():
     """
     app = CommitListTestApp()
     async with app.run_test() as pilot:
-        widget = app.query_one(CommitList)
+        widget = app.query_one(CommitHistory)
         list_view = widget.query_one(ListView)
 
         commit = make_commit(id="abc123", message="Commit on main")
@@ -151,7 +151,7 @@ async def test_commit_list_show_with_tags():
     """
     app = CommitListTestApp()
     async with app.run_test() as pilot:
-        widget = app.query_one(CommitList)
+        widget = app.query_one(CommitHistory)
         list_view = widget.query_one(ListView)
 
         commit = make_commit(id="abc123", message="Tagged commit")
@@ -175,7 +175,7 @@ async def test_commit_list_show_with_multiple_branches_and_tags():
     """
     app = CommitListTestApp()
     async with app.run_test() as pilot:
-        widget = app.query_one(CommitList)
+        widget = app.query_one(CommitHistory)
         list_view = widget.query_one(ListView)
 
         commit = make_commit(id="abc123", message="Release commit")
@@ -208,7 +208,7 @@ async def test_commit_list_show_replaces_existing():
     """
     app = CommitListTestApp()
     async with app.run_test() as pilot:
-        widget = app.query_one(CommitList)
+        widget = app.query_one(CommitHistory)
         list_view = widget.query_one(ListView)
 
         # First show
@@ -236,7 +236,7 @@ def test_commit_list_get_label():
 
     Checks that label is created correctly with proper styling.
     """
-    widget = CommitList()
+    widget = CommitHistory()
     commit = make_commit(id="abc1234567890abcdef", message="Test commit")
     label = widget._get_label(commit)
 
@@ -250,7 +250,7 @@ def test_commit_list_get_label_with_branches():
 
     Checks that branch decorations are included in the label.
     """
-    widget = CommitList()
+    widget = CommitHistory()
     commit = make_commit(id="abc123", message="Commit on main")
     branch = make_branch(name="refs/heads/main", target_id="abc123")
     widget.branches_by_commit = {"abc123": [branch]}
@@ -267,7 +267,7 @@ def test_commit_list_get_label_with_tags():
 
     Checks that tag decorations are included in the label.
     """
-    widget = CommitList()
+    widget = CommitHistory()
     commit = make_commit(id="abc123", message="Tagged commit")
     tag = make_tag(name="refs/tags/v1.0.0", target_id="abc123")
     widget.tags_by_commit = {"abc123": [tag]}
@@ -287,7 +287,7 @@ def test_commit_list_get_body_text():
     commit = make_commit(
         message="Test commit message", author=make_signature(name="Alice")
     )
-    text = CommitList._get_body_text(commit)
+    text = CommitHistory._get_body_text(commit)
 
     assert text is not None
     # Check that text contains the message and author
@@ -305,7 +305,7 @@ def test_commit_list_get_body_text_root_commit():
     commit = make_commit(
         message="Initial commit", parent_ids=[], author=make_signature(name="Bob")
     )
-    text = CommitList._get_body_text(commit)
+    text = CommitHistory._get_body_text(commit)
 
     assert text is not None
     text_str = str(text)
@@ -319,7 +319,7 @@ def test_commit_list_get_header_text_plain():
 
     Checks that header text contains commit short ID.
     """
-    widget = CommitList()
+    widget = CommitHistory()
     commit = make_commit(id="abc1234567890abcdef")
     text = widget._get_header_text(commit)
 
@@ -335,7 +335,7 @@ def test_commit_list_get_header_text_with_branch():
 
     Checks that branch shorthand is included in header text.
     """
-    widget = CommitList()
+    widget = CommitHistory()
     commit = make_commit(id="abc123")
     branch = make_branch(name="refs/heads/main", target_id="abc123")
     widget.branches_by_commit = {"abc123": [branch]}
@@ -354,7 +354,7 @@ def test_commit_list_get_header_text_with_tag():
 
     Checks that tag shorthand is included in header text.
     """
-    widget = CommitList()
+    widget = CommitHistory()
     commit = make_commit(id="abc123")
     tag = make_tag(name="refs/tags/v1.0.0", target_id="abc123")
     widget.tags_by_commit = {"abc123": [tag]}
@@ -373,7 +373,7 @@ def test_commit_list_get_header_text_with_multiple_decorations():
 
     Checks that all decorations are included in header text.
     """
-    widget = CommitList()
+    widget = CommitHistory()
     commit = make_commit(id="abc123")
     branches = [
         make_branch(name="refs/heads/main", target_id="abc123"),
@@ -401,7 +401,7 @@ def test_commit_list_on_list_view_selected_handler():
 
     Checks that handler extracts correct commit ID and posts message.
     """
-    widget = CommitList()
+    widget = CommitHistory()
     commits = [
         make_commit(id="abc123", message="First"),
         make_commit(id="def456", message="Second"),
@@ -426,7 +426,7 @@ def test_commit_list_on_list_view_selected_handler():
     widget.on_list_view_selected(event)
 
     assert len(posted_messages) == 1
-    assert isinstance(posted_messages[0], CommitList.CommitSelected)
+    assert isinstance(posted_messages[0], CommitHistory.CommitSelected)
     assert posted_messages[0].id == "abc123"
 
 
@@ -436,7 +436,7 @@ def test_commit_list_commit_selected_message():
 
     Checks that message is created with correct commit ID.
     """
-    message = CommitList.CommitSelected("abc1234567890abcdef")
+    message = CommitHistory.CommitSelected("abc1234567890abcdef")
     assert message.id == "abc1234567890abcdef"
 
 
@@ -454,7 +454,7 @@ def test_commit_list_on_list_view_selected_indices(index, expected_id):
 
     Checks that correct commit ID is extracted for each index.
     """
-    widget = CommitList()
+    widget = CommitHistory()
     widget.commits = [
         make_commit(id="abc123", message="First"),
         make_commit(id="def456", message="Second"),
@@ -496,7 +496,7 @@ def test_commit_list_get_label_various_messages(commit_message, author_name):
 
     Checks that labels are created correctly for different commits.
     """
-    widget = CommitList()
+    widget = CommitHistory()
     commit = make_commit(
         message=commit_message, author=make_signature(name=author_name)
     )
