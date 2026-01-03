@@ -20,7 +20,26 @@ class TagList(Vertical):
     Shows tag names in a selectable list and posts a message when a tag is selected.
     """
 
-    CSS_PATH: str = ".style/tag_list.tcss"
+    # Widgets should use inline TCSS for styling.
+    DEFAULT_CSS = """
+    TagList {
+        width: 30;
+        border: solid $primary;
+        overflow-y: auto;
+        scrollbar-size: 0 0;
+    }
+
+    TagList > ListView {
+        height: 100%;
+        scrollbar-size: 0 0;
+    }
+
+    .tag-item {
+        height: auto;
+        padding: 0 1;
+        color: $warning;
+    }
+    """
 
     class TagSelected(Message):
         """
@@ -41,7 +60,7 @@ class TagList(Vertical):
         """
         super().__init__(**kwargs)
         self.tags: list[Tag] = []
-        self.border_title: str = "Tags"
+        self.border_title: str = "   Tags   "
 
     def compose(self):
         """

@@ -19,7 +19,19 @@ class CommitDetail(VerticalScroll):
     Shows commit metadata, author/committer info, dates, message, and parents.
     """
 
-    CSS_PATH: str = ".style/commit_detail.tcss"
+    # Widgets should use inline TCSS for styling.
+    DEFAULT_CSS = """
+    CommitDetail {
+        width: 1fr;
+        border: solid $primary;
+        padding: 1;
+        scrollbar-size: 0 0;
+    }
+
+    CommitDetail > Static {
+        width: 100%;
+    }
+    """
     DEFAULT_TEXT: str = "Select a commit to view details"
 
     def __init__(self, **kwargs) -> None:
@@ -30,6 +42,7 @@ class CommitDetail(VerticalScroll):
         """
         super().__init__(**kwargs)
         self.commit: Commit | None = None
+        self.border_title: str = "   Commit Details   "
 
     def compose(self):
         """

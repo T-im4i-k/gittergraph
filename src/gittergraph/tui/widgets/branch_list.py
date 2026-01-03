@@ -20,7 +20,26 @@ class BranchList(Vertical):
     Shows branch names in a selectable list and posts a message when a branch is selected.
     """
 
-    CSS_PATH: str = ".style/branch_list.tcss"
+    # Widgets should use inline TCSS for styling.
+    DEFAULT_CSS = """
+    BranchList {
+        width: 30;
+        border: solid $primary;
+        overflow-y: auto;
+        scrollbar-size: 0 0;
+    }
+    
+    BranchList > ListView {
+        height: 100%;
+        scrollbar-size: 0 0;
+    }
+    
+    .branch-item {
+        height: auto;
+        padding: 0 1;
+        color: $success;
+    }
+    """
 
     class BranchSelected(Message):
         """
@@ -41,6 +60,7 @@ class BranchList(Vertical):
         """
         super().__init__(**kwargs)
         self.branches: list[Branch] = []
+        self.border_title = "   Branches   "
 
     def compose(self):
         """
