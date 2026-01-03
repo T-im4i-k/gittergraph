@@ -5,7 +5,7 @@ Helpers for model tests.
 Provides utility functions for constructing model objects in tests.
 """
 
-from gittergraph.models import Branch, Commit, Signature
+from gittergraph.models import Branch, Commit, Signature, Tag
 
 
 def make_branch(**kwargs):
@@ -46,4 +46,16 @@ def make_commit(**kwargs):
         author=kwargs.get("author", make_signature()),
         committer=kwargs.get("committer", make_signature()),
         parent_ids=kwargs.get("parent_ids", []),
+    )
+
+
+def make_tag(**kwargs):
+    """
+    Create a Tag instance for testing.
+
+    Returns a Tag with default or provided attributes.
+    """
+    return Tag(
+        target_id=kwargs.get("target_id", "abc1234567890"),
+        name=kwargs.get("name", "refs/tags/v1.0.0"),
     )
