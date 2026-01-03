@@ -1,0 +1,19 @@
+/* @generated "all" Claude-Sonnet-4.5 */
+TagList {
+    width: 30;
+    border: solid $primary;
+    border-title: "Tags";
+    overflow-y: auto;
+    scrollbar-size: 0 0;
+}
+
+TagList > ListView {
+    height: 100%;
+    scrollbar-size: 0 0;
+}
+
+.tag-item {
+    height: auto;
+    padding: 0 1;
+    color: $warning;
+}
