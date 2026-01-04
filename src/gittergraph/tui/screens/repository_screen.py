@@ -7,7 +7,7 @@ Defines the main screen for displaying the git repository, including commit hist
 
 from textual.containers import Horizontal
 from textual.screen import Screen
-from textual.widgets import ListView
+from textual.widgets import Footer, ListView
 
 from gittergraph.core import GitGraph
 from gittergraph.models import Branch, Commit, HeadInfo, Tag
@@ -57,6 +57,7 @@ class RepositoryScreen(Screen):
         with Horizontal():
             yield HistoryPanel(id="history-panel")
             yield RefPanel(id="ref-panel")
+        yield Footer()
 
     def show(self, graph: GitGraph) -> None:
         """
