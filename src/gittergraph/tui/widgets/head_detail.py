@@ -40,6 +40,8 @@ class HeadDetail(Vertical):
     """
     DEFAULT_TEXT: str = "Not set"
 
+    can_focus = True
+
     class HeadSelected(Message):
         """
         Message sent when HEAD is clicked.
@@ -86,7 +88,7 @@ class HeadDetail(Vertical):
 
         text: Text = Text()
         text.append("  ", style="dim")
-        text.append("→ ", style="cyan bold")
+        text.append("➤ ", style="cyan bold")
 
         if self.head.branch_name:
             text.append(self.head.branch_name, style="cyan")
@@ -105,3 +107,10 @@ class HeadDetail(Vertical):
         """
         if self.head and self.head.target_id:
             self.post_message(self.HeadSelected())
+
+    def on_key(self, event):
+        """Handle key presses when widget is focused."""
+        if event.key == "enter":
+            self.on_click()
+            event.prevent_default()
+            event.stop()
