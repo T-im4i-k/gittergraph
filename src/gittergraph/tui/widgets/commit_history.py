@@ -65,6 +65,7 @@ class CommitHistory(Vertical):
         self.commits: list[Commit] = []
         self.branches_by_commit: dict[str, list[Branch]] = {}
         self.tags_by_commit: dict[str, list[Tag]] = {}
+        self.border_title: str = "Linear History"
 
     def compose(self):
         """
@@ -120,7 +121,7 @@ class CommitHistory(Vertical):
         text.append("\n│ ", style="bold yellow")
         text.append(commit.short_message)
         text.append("\n┴ " if commit.is_root else "\n│ ", style="bold yellow")
-        text.append(f"\n  {commit.author.name}", style="dim")
+        text.append(f"{commit.author.name}", style="dim")
         return text
 
     def _get_header_text(self, commit: Commit) -> Text:

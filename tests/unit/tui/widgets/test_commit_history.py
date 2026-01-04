@@ -35,6 +35,7 @@ def test_commit_list_initialization():
     assert widget.commits == []
     assert widget.branches_by_commit == {}
     assert widget.tags_by_commit == {}
+    assert widget.border_title == "Linear History"
 
 
 @pytest.mark.asyncio
