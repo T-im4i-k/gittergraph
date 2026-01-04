@@ -14,19 +14,20 @@ help:
 	@echo "  make format-all   - Format source code and tests"
 	@echo ""
 	@echo "Linting:"
-	@echo "  make lint         - Run pylint on source code (default)"
+	@echo "  make lint         - Run pylint on source code"
 	@echo "  make lint-all     - Run pylint on source code and tests"
 	@echo ""
 	@echo "Type checking:"
-	@echo "  make mypy         - Run mypy on source code (default)"
+	@echo "  make mypy         - Run mypy on source code"
 	@echo "  make mypy-all     - Run mypy on source code and tests"
 	@echo ""
 	@echo "Testing:"
 	@echo "  make test         - Run pytest"
+	@echo "  make test-cov     - Run pytest with coverage report"
 	@echo ""
 	@echo "Combined checks:"
 	@echo "  make check        - Run all checks on source code (format, lint, mypy, test)"
-	@echo "  make check-all    - Run all checks on source and tests (comprehensive)"
+	@echo "  make check-all    - Run all checks on source and tests"
 	@echo ""
 	@echo "Cleanup:"
 	@echo "  make clean        - Remove Python artifacts"
@@ -87,6 +88,9 @@ test:
 	@echo "Running tests with pytest..."
 	pytest tests/
 
+test-cov:
+	@echo "Running tests with coverage report..."
+	pytest tests/ --cov=src/gittergraph
 
 # Combined check targets
 check-src: format-src lint-src mypy-src test
