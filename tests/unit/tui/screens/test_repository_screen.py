@@ -203,7 +203,7 @@ async def test_repository_screen_action_focus_head(simple_repo):
     """
     Test action_focus_head keyboard shortcut.
 
-    Checks that the focus action can be called on HEAD detail widget.
+    Checks that 'h' key focuses the HEAD detail widget.
     """
     repo_path, _ = simple_repo
     app = RepositoryScreenTestApp()
@@ -211,14 +211,11 @@ async def test_repository_screen_action_focus_head(simple_repo):
         screen = app.query_one(RepositoryScreen)
         graph = GitGraph.from_path(repo_path)
         screen.show(graph)
-        await pilot.pause()
 
-        # Call action - HeadDetail focus behavior to be fully tested when implemented
-        screen.action_focus_head()
-        await pilot.pause()
+        await pilot.press("h")
 
         head_detail = screen.query_one("#head-detail", HeadDetail)
-        assert head_detail is not None
+        assert head_detail.has_focus
         await pilot.pause()
 
 
