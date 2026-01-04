@@ -40,12 +40,14 @@ class BranchAccess(BaseAccess):
         branches: dict[str, Branch] = {}
 
         for shorthand in self._repo.branches.local:
-            name_local: str = f"refs/heads/{shorthand}"
-            branches[name_local] = self.get(name_local)
+            if not shorthand.endswith("/HEAD"):
+                name_local: str = f"refs/heads/{shorthand}"
+                branches[name_local] = self.get(name_local)
 
         for shorthand in self._repo.branches.remote:
-            name_remote: str = f"refs/remotes/{shorthand}"
-            branches[name_remote] = self.get(name_remote)
+            if not shorthand.endswith("/HEAD"):
+                name_remote: str = f"refs/remotes/{shorthand}"
+                branches[name_remote] = self.get(name_remote)
 
         return branches
 
