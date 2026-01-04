@@ -85,7 +85,7 @@ def test_head_widget_get_text_with_head():
     text = widget._get_text()
     assert isinstance(text, Text)
     assert "refs/heads/main" in text.plain
-    assert "→" in text.plain
+    assert "➤" in text.plain
 
 
 def test_head_widget_get_text_without_head():
@@ -231,7 +231,7 @@ def test_head_widget_get_text_detached():
     text = widget._get_text()
     assert isinstance(text, Text)
     assert "abc1234" in text.plain
-    assert "→" in text.plain
+    assert "➤" in text.plain
 
 
 def test_head_widget_get_text_unborn():
@@ -299,4 +299,181 @@ def test_head_widget_on_click_unborn():
     widget.on_click()
 
     # No message should be posted for unborn HEAD
+    assert len(posted_messages) == 0
+
+
+def test_head_widget_can_focus():
+    """
+    Test that HeadDetail widget can be focused.
+
+    Checks that can_focus is set to True.
+    """
+    widget = HeadDetail()
+    assert widget.can_focus is True
+
+
+@pytest.mark.asyncio
+async def test_head_widget_focus_with_app():
+    """
+    Test focusing the HeadDetail widget in app context.
+
+    Checks that widget can receive focus.
+    """
+    app = HeadWidgetTestApp()
+    async with app.run_test() as pilot:
+        widget = app.query_one(HeadDetail)
+
+        widget.focus()
+        await pilot.pause()
+
+        assert widget.has_focus
+
+
+def test_head_widget_on_key_enter():
+    """
+    Test on_key handler with Enter key.
+
+    Checks that pressing Enter triggers on_click behavior.
+    """
+    widget = HeadDetail()
+    head = make_head(branch_name="refs/heads/main", target_id="abc1234567890")
+    widget.head = head
+
+    # Mock the post_message method to capture the message
+    posted_messages = []
+
+    def mock_post_message(message):
+        posted_messages.append(message)
+
+    widget.post_message = mock_post_message
+
+    # Create a mock event with Enter key
+    class MockEvent:
+        def __init__(self):
+            self.key = "enter"
+            self._prevented = False
+            self._stopped = False
+
+        def prevent_default(self):
+            self._prevented = True
+
+        def stop(self):
+            self._stopped = True
+
+    event = MockEvent()
+    widget.on_key(event)
+
+    # Should post HeadSelected message
+    assert len(posted_messages) == 1
+    assert isinstance(posted_messages[0], HeadDetail.HeadSelected)
+    assert event._prevented is True
+    assert event._stopped is True
+
+
+def test_head_widget_on_key_enter_without_head():
+    """
+    Test on_key handler with Enter key when no HEAD is set.
+
+    Checks that pressing Enter does nothing when head is None.
+    """
+    widget = HeadDetail()
+    widget.head = None
+
+    # Mock the post_message method to capture the message
+    posted_messages = []
+
+    def mock_post_message(message):
+        posted_messages.append(message)
+
+    widget.post_message = mock_post_message
+
+    # Create a mock event with Enter key
+    class MockEvent:
+        def __init__(self):
+            self.key = "enter"
+            self._prevented = False
+            self._stopped = False
+
+        def prevent_default(self):
+            self._prevented = True
+
+        def stop(self):
+            self._stopped = True
+
+    event = MockEvent()
+    widget.on_key(event)
+
+    # Should not post any message
+    assert len(posted_messages) == 0
+
+
+def test_head_widget_on_key_enter_unborn():
+    """
+    Test on_key handler with Enter key when HEAD is unborn.
+
+    Checks that pressing Enter does nothing for unborn HEAD.
+    """
+    widget = HeadDetail()
+    head = make_head(state=HeadState.UNBORN, branch_name=None, target_id=None)
+    widget.head = head
+
+    # Mock the post_message method to capture the message
+    posted_messages = []
+
+    def mock_post_message(message):
+        posted_messages.append(message)
+
+    widget.post_message = mock_post_message
+
+    # Create a mock event with Enter key
+    class MockEvent:
+        def __init__(self):
+            self.key = "enter"
+            self._prevented = False
+            self._stopped = False
+
+        def prevent_default(self):
+            self._prevented = True
+
+        def stop(self):
+            self._stopped = True
+
+    event = MockEvent()
+    widget.on_key(event)
+
+    # Should not post any message for unborn HEAD
+    assert len(posted_messages) == 0
+
+
+@pytest.mark.parametrize(
+    "key",
+    ["space", "escape", "tab", "a", "q"],
+)
+def test_head_widget_on_key_other_keys(key):
+    """
+    Test on_key handler with non-Enter keys.
+
+    Checks that other keys don't trigger on_click behavior.
+    """
+    widget = HeadDetail()
+    head = make_head(branch_name="refs/heads/main", target_id="abc1234567890")
+    widget.head = head
+
+    # Mock the post_message method to capture the message
+    posted_messages = []
+
+    def mock_post_message(message):
+        posted_messages.append(message)
+
+    widget.post_message = mock_post_message
+
+    # Create a mock event with the given key
+    class MockEvent:
+        def __init__(self, k):
+            self.key = k
+
+    event = MockEvent(key)
+    widget.on_key(event)
+
+    # Should not post any message for non-Enter keys
     assert len(posted_messages) == 0
