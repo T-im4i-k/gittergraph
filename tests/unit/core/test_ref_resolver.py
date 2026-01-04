@@ -8,7 +8,7 @@ import pygit2
 import pytest
 
 from gittergraph.access import GitRepository
-from tests.core.core_helper import get_ref_resolver
+from tests.unit.core.core_helper import get_ref_resolver
 
 
 class TestRefResolver:

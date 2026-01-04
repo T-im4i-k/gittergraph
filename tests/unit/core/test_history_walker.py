@@ -7,7 +7,7 @@ Tests commit history traversal functionality, including linear history walking a
 
 import pytest
 
-from tests.core.core_helper import get_history_walker
+from tests.unit.core.core_helper import get_history_walker
 
 
 class TestHistoryWalker:

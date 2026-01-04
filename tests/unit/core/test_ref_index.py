@@ -7,7 +7,7 @@ Unit tests for the RefIndex class, covering branch and tag indexing, lookup, and
 
 import pytest
 
-from tests.core.core_helper import get_ref_index
+from tests.unit.core.core_helper import get_ref_index
 
 
 class TestRefIndex:

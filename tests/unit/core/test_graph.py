@@ -7,7 +7,7 @@ Unit tests for the GitGraph class, covering graph initialization, data loading, 
 import pygit2
 
 from gittergraph.core.graph import GitGraph
-from tests.core.core_helper import get_git_graph
+from tests.unit.core.core_helper import get_git_graph
 
 
 class TestGitGraph:

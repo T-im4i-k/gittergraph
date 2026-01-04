@@ -9,7 +9,7 @@ import pytest
 
 from gittergraph.access import GitRepository
 from gittergraph.core.graph_data import GitGraphData
-from tests.core.core_helper import get_graph_data
+from tests.unit.core.core_helper import get_graph_data
 
 
 class TestGitGraphData:
