@@ -42,7 +42,7 @@ class CommitDetail(VerticalScroll):
         """
         super().__init__(**kwargs)
         self.commit: Commit | None = None
-        self.border_title: str = "   Commit Details   "
+        self.border_title: str = "Commit Details"
 
     def compose(self):
         """

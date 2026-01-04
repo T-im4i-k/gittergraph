@@ -33,6 +33,7 @@ def test_commit_detail_initialization():
     """
     widget = CommitDetail()
     assert widget.commit is None
+    assert widget.border_title == "Commit Details"
 
 
 def test_commit_detail_get_text_with_commit_same_author_committer():

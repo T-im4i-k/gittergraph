@@ -60,7 +60,7 @@ class TagList(Vertical):
         """
         super().__init__(**kwargs)
         self.tags: list[Tag] = []
-        self.border_title: str = "   Tags   "
+        self.border_title: str = "Tags"
 
     def compose(self):
         """

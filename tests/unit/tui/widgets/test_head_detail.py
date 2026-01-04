@@ -35,7 +35,7 @@ def test_head_widget_initialization():
     """
     widget = HeadDetail()
     assert widget.head is None
-    assert widget.border_title == "   HEAD   "
+    assert widget.border_title == "HEAD"
 
 
 @pytest.mark.asyncio

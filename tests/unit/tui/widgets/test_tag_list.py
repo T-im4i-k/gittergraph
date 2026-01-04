@@ -33,7 +33,7 @@ def test_tag_list_initialization():
     """
     widget = TagList()
     assert widget.tags == []
-    assert widget.border_title == "   Tags   "
+    assert widget.border_title == "Tags"
 
 
 @pytest.mark.asyncio

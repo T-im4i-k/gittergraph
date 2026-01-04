@@ -60,7 +60,7 @@ class BranchList(Vertical):
         """
         super().__init__(**kwargs)
         self.branches: list[Branch] = []
-        self.border_title = "   Branches   "
+        self.border_title = "Branches"
 
     def compose(self):
         """

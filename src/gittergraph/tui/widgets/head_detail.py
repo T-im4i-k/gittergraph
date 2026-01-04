@@ -55,7 +55,7 @@ class HeadDetail(Vertical):
         """
         super().__init__(**kwargs)
         self.head: HeadInfo | None = None
-        self.border_title: str = "   HEAD   "
+        self.border_title: str = "HEAD"
 
     def compose(self):
         """

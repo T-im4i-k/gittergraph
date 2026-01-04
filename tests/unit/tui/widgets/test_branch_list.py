@@ -33,7 +33,7 @@ def test_branch_list_initialization():
     """
     widget = BranchList()
     assert widget.branches == []
-    assert widget.border_title == "   Branches   "
+    assert widget.border_title == "Branches"
 
 
 @pytest.mark.asyncio
