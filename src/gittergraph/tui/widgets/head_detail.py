@@ -23,7 +23,6 @@ class HeadDetail(Vertical):
     # Widgets should use inline TCSS for styling.
     DEFAULT_CSS = """
     HeadDetail {
-        width: 30;
         border: solid $primary;
         height: auto;
     }

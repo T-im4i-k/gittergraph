@@ -8,7 +8,7 @@ RepositoryScreen {
 }
 
 #ref-panel {
-    width: 30;
+    width: 40;
 }
 
 #commit-history {

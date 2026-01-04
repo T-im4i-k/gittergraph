@@ -23,7 +23,6 @@ class BranchList(Vertical):
     # Widgets should use inline TCSS for styling.
     DEFAULT_CSS = """
     BranchList {
-        width: 30;
         border: solid $primary;
         overflow-y: auto;
         scrollbar-size: 0 0;
