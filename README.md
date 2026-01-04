@@ -181,7 +181,7 @@ pytest tests/unit/tui/test_app.py
 
 ```bash
 # Generate coverage report
-make test-coverage
+make test-cov
 
 # Or use pytest directly with coverage
 pytest --cov=gittergraph tests/
