@@ -37,7 +37,55 @@ class RepositoryScreen(Screen):
         ("t", "focus_tags", "Focus Tags"),
     ]
 
-    CSS_PATH = "./style/repository_screen.tcss"
+    DEFAULT_CSS = """
+    RepositoryScreen {
+        layout: horizontal;
+    }
+    
+    #history-panel {
+        width: 1fr;
+    }
+    
+    #ref-panel {
+        width: 40;
+    }
+    
+    #commit-history {
+        height: 2fr;
+    }
+    
+    #commit-detail {
+        height: 1fr;
+    }
+    
+    #branch-list {
+        height: 3fr;
+    }
+    
+    #tag-list {
+        height: 2fr;
+    }
+    
+    #commit-history:focus-within {
+        border: double $accent;
+    }
+    
+    #commit-detail:focus-within {
+        border: double $accent;
+    }
+    
+    #head-detail:focus-within {
+        border: double $accent;
+    }
+    
+    #branch-list:focus-within {
+        border: double $accent;
+    }
+    
+    #tag-list:focus-within {
+        border: double $accent;
+    }
+    """
 
     def __init__(self, **kwargs) -> None:
         """
