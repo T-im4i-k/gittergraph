@@ -1,3 +1,4 @@
+/* @generated "all" Claude-Sonnet-4.5 */
 RepositoryScreen {
     layout: horizontal;
 }
@@ -10,7 +11,6 @@ RepositoryScreen {
     width: 30;
 }
 
-/* History panel widgets - 2:1 ratio */
 #commit-history {
     height: 2fr;
 }
@@ -19,7 +19,6 @@ RepositoryScreen {
     height: 1fr;
 }
 
-/* Ref panel widgets - HEAD fixed, branches slightly taller than tags */
 #branch-list {
     height: 3fr;
 }
@@ -28,7 +27,6 @@ RepositoryScreen {
     height: 2fr;
 }
 
-/* Focus indicators for keyboard navigation */
 #commit-history:focus-within {
     border: double $accent;
 }
