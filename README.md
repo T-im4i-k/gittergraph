@@ -51,7 +51,17 @@ matters.
 
 ### Getting Started
 
-Once you have cloned the repository, installation can be done via the provided Makefile:
+**Clone the repository:**
+
+```bash
+# Clone via HTTPS
+git clone https://github.com/T-im4i-k/gittergraph.git
+
+# Or via SSH
+git clone git@github.com:T-im4i-k/gittergraph.git
+```
+
+**Install using the provided Makefile:**
 
 ```bash
 # Install in development mode with dev dependencies
