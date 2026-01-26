@@ -4,6 +4,7 @@ Tests for time utility functions.
 
 Covers helpers for working with time.
 """
+
 from datetime import datetime, timedelta, timezone
 
 import pytest

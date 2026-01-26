@@ -6,7 +6,6 @@ Test helpers for core tests.
 Provides utility functions for constructing test objects, such as RefResolver, to simplify and deduplicate test code in the core test suite.
 """
 
-
 from gittergraph.access import GitRepository
 from gittergraph.core import GitGraph
 from gittergraph.core.graph_data import GitGraphData

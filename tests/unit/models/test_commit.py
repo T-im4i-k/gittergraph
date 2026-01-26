@@ -5,7 +5,6 @@ Tests for the Commit model.
 Covers commit property logic including merge/root detection and message handling.
 """
 
-
 import pytest
 
 from gittergraph.models import Commit

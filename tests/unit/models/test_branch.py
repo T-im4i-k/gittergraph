@@ -5,7 +5,6 @@ Tests for the Branch model.
 Covers branch property logic including remote detection and shorthand extraction.
 """
 
-
 import pytest
 
 from gittergraph.models import Branch

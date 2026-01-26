@@ -6,7 +6,6 @@ Pytest fixtures for git repository setup.
 Provides reusable fixtures for creating temporary git repositories with various commit and branch structures for testing purposes.
 """
 
-
 import pygit2
 import pytest
 

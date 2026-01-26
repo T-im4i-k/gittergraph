@@ -4,6 +4,7 @@ GitGraphData tests.
 
 Unit tests for the GitGraphData dataclass, covering data loading, immutability, and snapshot functionality.
 """
+
 import pygit2
 import pytest
 

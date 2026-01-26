@@ -4,6 +4,7 @@ Tests for RefResolver class.
 
 Tests reference name resolution functionality, including HEAD, commit IDs, branch names, and tag names.
 """
+
 import pygit2
 import pytest
 

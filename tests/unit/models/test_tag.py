@@ -5,7 +5,6 @@ Tests for the Tag, LightweightTag, and AnnotatedTag models.
 Covers tag property logic including shorthand extraction and tag metadata.
 """
 
-
 import pytest
 
 from gittergraph.models import Tag

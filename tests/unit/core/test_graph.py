@@ -4,6 +4,7 @@ GitGraph tests.
 
 Unit tests for the GitGraph class, covering graph initialization, data loading, helper methods, and repository operations.
 """
+
 import pygit2
 
 from gittergraph.core.graph import GitGraph
