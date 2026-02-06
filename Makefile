@@ -1,36 +1,47 @@
 # @generated "all" Claude-Sonnet-4.5
 
-.PHONY: test lint lint-src lint-all mypy mypy-src mypy-all format format-src format-all check check-src check-all clean install install-dev help
+.PHONY: help install install-dev
+.PHONY: format format-src format-all
+.PHONY: check-format check-format-src check-format-all
+.PHONY: lint lint-src lint-all
+.PHONY: mypy mypy-src mypy-all
+.PHONY: test test-cov
+.PHONY: check check-src check-all
+.PHONY: clean
 
 help:
 	@echo "Available targets:"
 	@echo ""
 	@echo "Installation:"
-	@echo "  make install      - Install package (non-editable)"
-	@echo "  make install-dev  - Install package in editable mode with dev dependencies"
+	@echo "  make install            - Install package (non-editable)"
+	@echo "  make install-dev        - Install package in editable mode with dev dependencies"
 	@echo ""
 	@echo "Formatting:"
-	@echo "  make format       - Format source code with isort and black"
-	@echo "  make format-all   - Format source code and tests"
+	@echo "  make format             - Format source code with isort and black"
+	@echo "  make format-all         - Format source code and tests"
+	@echo ""
+	@echo "Formatting checking:"
+	@echo "  make check-format       - Check source code formatting with isort and black"
+	@echo "  make check-format-all   - Check source code and tests formatting"
 	@echo ""
 	@echo "Linting:"
-	@echo "  make lint         - Run pylint on source code"
-	@echo "  make lint-all     - Run pylint on source code and tests"
+	@echo "  make lint               - Run pylint on source code"
+	@echo "  make lint-all           - Run pylint on source code and tests"
 	@echo ""
 	@echo "Type checking:"
-	@echo "  make mypy         - Run mypy on source code"
-	@echo "  make mypy-all     - Run mypy on source code and tests"
+	@echo "  make mypy               - Run mypy on source code"
+	@echo "  make mypy-all           - Run mypy on source code and tests"
 	@echo ""
 	@echo "Testing:"
-	@echo "  make test         - Run pytest"
-	@echo "  make test-cov     - Run pytest with coverage report"
+	@echo "  make test               - Run pytest"
+	@echo "  make test-cov           - Run pytest with coverage report"
 	@echo ""
 	@echo "Combined checks:"
-	@echo "  make check        - Run all checks on source code (format, lint, mypy, test)"
-	@echo "  make check-all    - Run all checks on source and tests"
+	@echo "  make check              - Run all checks on source code (format, lint, mypy, test)"
+	@echo "  make check-all          - Run all checks on source and tests"
 	@echo ""
 	@echo "Cleanup:"
-	@echo "  make clean        - Remove Python artifacts"
+	@echo "  make clean              - Remove Python artifacts"
 
 install:
 	pip install .
@@ -53,6 +64,22 @@ format-all:
 	black src/ tests/
 
 format: format-src
+
+
+# Formatting check targets
+check-format-src:
+	@echo "Checking import order in source code with isort..."
+	@isort --check-only --diff src/
+	@echo "Checking source code formatting with black..."
+	@black --check --diff src/
+
+check-format-all:
+	@echo "Checking import order with isort..."
+	@isort --check-only --diff src/ tests/
+	@echo "Checking code formatting with black..."
+	@black --check --diff src/ tests/
+
+check-format: check-format-src
 
 
 # Linting targets
@@ -83,7 +110,7 @@ mypy-all:
 mypy: mypy-src
 
 
-# Testing target
+# Testing targets
 test:
 	@echo "Running tests with pytest..."
 	pytest tests/
@@ -92,11 +119,12 @@ test-cov:
 	@echo "Running tests with coverage report..."
 	pytest tests/ --cov=src/gittergraph
 
+
 # Combined check targets
-check-src: format-src lint-src mypy-src test
+check-src: check-format-src lint-src mypy-src test
 	@echo "✓ All source checks passed!"
 
-check-all: format-all lint-all mypy-all test
+check-all: check-format-all lint-all mypy-all test
 	@echo "✓ All checks passed!"
 
 check: check-src
