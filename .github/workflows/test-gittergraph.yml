@@ -1,0 +1,49 @@
+name: Test gittergraph Package
+
+permissions:
+  contents: read
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Setup python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Install package
+        shell: bash
+        run: |
+          make install-dev
+
+      - name: Check formatting
+        shell: bash
+        run: |
+          make check-format
+
+      - name: Lint code
+        shell: bash
+        run: |
+          make lint
+
+      - name: Check types
+        shell: bash
+        run: |
+          make mypy
+
+      - name: Run tests
+        shell: bash
+        run: |
+          make test
