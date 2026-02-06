@@ -147,8 +147,11 @@ gittergraph/
 Use the provided Makefile targets to streamline your development workflow:
 
 ```bash
-# Format source code (isort + black on src/)
+# Format source code
 make format
+
+# Check source code formatting
+make check-format
 
 # Run linter on source code
 make lint
@@ -159,17 +162,18 @@ make mypy
 # Run test suite
 make test
 
-# Run all checks (format + lint + mypy + test)
+# Run all checks (check-format + lint + mypy + test)
 make check
 ```
 
 **Comprehensive targets:**
 
 ```bash
-make format-all    # Format both source and tests
-make lint-all      # Lint both source and tests
-make mypy-all      # Type-check both source and tests
-make check-all     # Run comprehensive checks on all code
+make format-all          # Format both source and tests
+make check-format-all    # Check formatting of both source and tests
+make lint-all            # Lint both source and tests
+make mypy-all            # Type-check both source and tests
+make check-all           # Run comprehensive checks on all code
 ```
 
 ### Running Tests
